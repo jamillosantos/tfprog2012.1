@@ -1,0 +1,15 @@
+{
+	"image": "INGAME_CUTSCENES.png",
+	"spriteCount": 11,
+	"sprite_0": { "id": "CUTSCENE2_EYE1", "x": 167, "y": 103, "width": 78, "height": 91, "pivotx": 39, "pivoty": 45 },
+	"sprite_1": { "id": "CUTSCENE2_EYE2", "x": 167, "y": 196, "width": 78, "height": 91, "pivotx": 39, "pivoty": 45 },
+	"sprite_2": { "id": "CUTSCENE2_EYE3", "x": 88, "y": 197, "width": 77, "height": 91, "pivotx": 38, "pivoty": 45 },
+	"sprite_3": { "id": "CUTSCENE2_EYE4", "x": 88, "y": 103, "width": 77, "height": 92, "pivotx": 38, "pivoty": 46 },
+	"sprite_4": { "id": "CUTSCENE3_EYE1", "x": 1, "y": 241, "width": 27, "height": 33, "pivotx": 13, "pivoty": 16 },
+	"sprite_5": { "id": "CUTSCENE3_EYE2", "x": 31, "y": 205, "width": 27, "height": 33, "pivotx": 13, "pivoty": 16 },
+	"sprite_6": { "id": "CUTSCENE3_EYE3", "x": 1, "y": 205, "width": 28, "height": 34, "pivotx": 14, "pivoty": 17 },
+	"sprite_7": { "id": "CUTSCENE1_EYE1", "x": 1, "y": 1, "width": 85, "height": 100, "pivotx": 42, "pivoty": 50 },
+	"sprite_8": { "id": "CUTSCENE1_EYE2", "x": 88, "y": 1, "width": 85, "height": 100, "pivotx": 42, "pivoty": 50 },
+	"sprite_9": { "id": "CUTSCENE1_EYE3", "x": 1, "y": 103, "width": 85, "height": 100, "pivotx": 42, "pivoty": 50 },
+	"sprite_10": { "id": "CUTSCENE1_EYE4", "x": 175, "y": 1, "width": 84, "height": 100, "pivotx": 42, "pivoty": 50 }
+}

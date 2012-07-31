@@ -1,0 +1,264 @@
+{
+	"CUTSCENE_EP1_INTRO" : {
+		"image" :         "episode1/Cutscene_Ep1_Begin.jpg",
+		"startMovement" : 4500,
+		"endMovement" :   13000,
+		"endScene" :      16500,
+		"sounds" :        [
+			{
+				"sound" : "birds_intro",
+				"start" : 500
+			}
+		]
+	},
+	"CUTSCENE_EP1_BOSS1" : {
+		"image" :         "episode1/Cutscene_Ep1_Boss1.jpg",
+		"startMovement" : 3000,
+		"endMovement" :   4500,
+		"endScene" :      7500,
+		"sounds" :        [
+			{
+				"sound" : "birds_boss",
+				"start" : 500
+			}
+		]
+	},
+	"CUTSCENE_EP1_BOSS2" : {
+		"image" :         "episode1/Cutscene_Ep1_Boss2.jpg",
+		"startMovement" : 3000,
+		"endMovement" :   4500,
+		"endScene" :      7500,
+		"sounds" :        [
+			{
+				"sound" : "birds_boss",
+				"start" : 500
+			}
+		]
+	},
+	"CUTSCENE_EP1_END" : {
+		"image" :         "episode1/Cutscene_Ep1_End.jpg",
+		"startMovement" : 2500,
+		"endMovement" :   7500,
+		"endScene" :      12500,
+		"sounds" :        [
+			{
+				"sound" : "birds_outro",
+				"start" : 500
+			},
+			{
+				"sound" : "pig_oink",
+				"start" : 10500
+			}
+		],
+		"sprites" : [
+			{
+				"image" : "CUTSCENE1_EYE1",
+				"start" : 0,
+				"end" :   8000,
+				"x" :     1525,
+				"y" :     510
+			},
+			{
+				"image" : "CUTSCENE1_EYE2",
+				"start" : 8000,
+				"end" :   9000,
+				"x" :     1525,
+				"y" :     510
+			},
+			{
+				"image" : "CUTSCENE1_EYE3",
+				"start" : 9000,
+				"end" :   10300,
+				"x" :     1525,
+				"y" :     510
+			},
+			{
+				"image" : "CUTSCENE1_EYE4",
+				"start" : 10300,
+				"end" :   10500,
+				"x" :     1525,
+				"y" :     510
+			},
+			{
+				"image" : "CUTSCENE1_EYE3",
+				"start" : 10500,
+				"end" :   13000,
+				"x" :     1525,
+				"y" :     510
+			}
+		]
+	},
+	"CUTSCENE_EP2_INTRO" : {
+		"image" :         "episode2/Cutscene_Ep2_Begin.jpg",
+		"startMovement" : 4500,
+		"endMovement" :   13000,
+		"endScene" :      16500,
+		"sounds" :        [
+			{
+				"sound" : "birds_intro",
+				"start" : 500
+			}
+		]
+	},
+	"CUTSCENE_EP2_BOSS1" : {
+		"image" :         "episode2/Cutscene_Ep2_Boss1.jpg",
+		"startMovement" : 3000,
+		"endMovement" :   4500,
+		"endScene" :      7500,
+		"sounds" :        [
+			{
+				"sound" : "birds_boss",
+				"start" : 500
+			}
+		]
+	},
+	"CUTSCENE_EP2_END" : {
+		"image" :         "episode2/Cutscene_Ep2_End.jpg",
+		"startMovement" : 3500,
+		"endMovement" :   8500,
+		"endScene" :      14700,
+		"sounds" :        [
+			{
+				"sound" : "birds_outro",
+				"start" : 500
+			},
+			{
+				"sound" : "pig_oink",
+				"start" : 12500
+			}
+		],
+		"sprites" : [
+			{
+				"image" : "CUTSCENE2_EYE1",
+				"start" : 0,
+				"end" :   9500,
+				"x" :     1790,
+				"y" :     510
+			},
+			{
+				"image" : "CUTSCENE2_EYE2",
+				"start" : 9500,
+				"end" :   10500,
+				"x" :     1790,
+				"y" :     510
+			},
+			{
+				"image" : "CUTSCENE2_EYE1",
+				"start" : 10500,
+				"end" :   11500,
+				"x" :     1790,
+				"y" :     510
+			},
+			{
+				"image" : "CUTSCENE2_EYE4",
+				"start" : 11500,
+				"end" :   11700,
+				"x" :     1790,
+				"y" :     510
+			},
+			{
+				"image" : "CUTSCENE2_EYE1",
+				"start" : 11700,
+				"end" :   12500,
+				"x" :     1790,
+				"y" :     510
+			},
+			{
+				"image" : "CUTSCENE2_EYE3",
+				"start" : 12500,
+				"end" :   15000,
+				"x" :     1790,
+				"y" :     510
+			}
+		]
+	},
+	"CUTSCENE_EP3_INTRO" : {
+		"image" :         "episode3/Cutscene_Ep3_Begin.jpg",
+		"startMovement" : 4500,
+		"endMovement" :   13000,
+		"endScene" :      16500,
+		"sounds" :        [
+			{
+				"sound" : "birds_intro",
+				"start" : 500
+			}
+		]
+	},
+	"CUTSCENE_EP3_BOSS1" : {
+		"image" :         "episode3/Cutscene_Ep3_Boss1.jpg",
+		"startMovement" : 3000,
+		"endMovement" :   4500,
+		"endScene" :      7500,
+		"sounds" :        [
+			{
+				"sound" : "birds_boss",
+				"start" : 500
+			}
+		]
+	},
+	"CUTSCENE_EP3_BOSS2" : {
+		"image" :         "episode3/Cutscene_Ep3_Boss2.jpg",
+		"startMovement" : 3000,
+		"endMovement" :   4500,
+		"endScene" :      7500,
+		"sounds" :        [
+			{
+				"sound" : "birds_boss",
+				"start" : 500
+			}
+		]
+	},
+	"CUTSCENE_EP3_END" : {
+		"image" :         "episode3/Cutscene_Ep3_End.jpg",
+		"startMovement" : 3500,
+		"endMovement" :   6500,
+		"endScene" :      13000,
+		"sounds" :        [
+			{
+				"sound" : "birds_outro",
+				"start" : 500
+			},
+			{
+				"sound" : "pig_oink",
+				"start" : 11000
+			}
+		],
+		"sprites" : [
+			{
+				"image" : "CUTSCENE3_EYE1",
+				"start" : 0,
+				"end" :   7500,
+				"x" :     1199,
+				"y" :     227
+			},
+			{
+				"image" : "CUTSCENE3_EYE2",
+				"start" : 7500,
+				"end" :   9000,
+				"x" :     1199,
+				"y" :     227
+			},
+			{
+				"image" : "CUTSCENE3_EYE1",
+				"start" : 9000,
+				"end" :   10000,
+				"x" :     1199,
+				"y" :     227
+			},
+			{
+				"image" : "CUTSCENE3_EYE3",
+				"start" : 10000,
+				"end" :   10300,
+				"x" :     1199,
+				"y" :     227
+			},
+			{
+				"image" : "CUTSCENE3_EYE1",
+				"start" : 10300,
+				"end" :   14000,
+				"x" :     1199,
+				"y" :     227
+			}
+		]
+	}
+}

@@ -1,0 +1,18 @@
+{
+	"image": "INGAME_MENU_VIDEOCHANNEL.png",
+	"spriteCount": 14,
+	"sprite_0": { "id": "BG_VIDEOPREVIEW_1", "x": 797, "y": 1, "width": 119, "height": 77, "pivotx": 59, "pivoty": 38 },
+	"sprite_1": { "id": "BUTTON_MOREVIDEOS_NORMAL", "x": 243, "y": 496, "width": 119, "height": 34, "pivotx": 59, "pivoty": 17 },
+	"sprite_2": { "id": "BG_VIDEOCHANNEL", "x": 1, "y": 1, "width": 794, "height": 414, "pivotx": 330, "pivoty": 207 },
+	"sprite_3": { "id": "TITLE_VIDEOCHANNEL", "x": 364, "y": 417, "width": 428, "height": 67, "pivotx": 214, "pivoty": 33 },
+	"sprite_4": { "id": "BG_VIDEOPREVIEW_2", "x": 797, "y": 80, "width": 119, "height": 77, "pivotx": 59, "pivoty": 38 },
+	"sprite_5": { "id": "BG_VIDEOPREVIEW_3", "x": 797, "y": 159, "width": 119, "height": 77, "pivotx": 59, "pivoty": 38 },
+	"sprite_6": { "id": "BG_VIDEOPREVIEW_4", "x": 797, "y": 238, "width": 119, "height": 77, "pivotx": 59, "pivoty": 38 },
+	"sprite_7": { "id": "BUTTON_MOREVIDEOS_HOVER", "x": 243, "y": 532, "width": 119, "height": 34, "pivotx": 59, "pivoty": 17 },
+	"sprite_8": { "id": "BG_VIDEOPREVIEW_1_HOVER", "x": 797, "y": 317, "width": 119, "height": 77, "pivotx": 59, "pivoty": 38 },
+	"sprite_9": { "id": "BG_VIDEOPREVIEW_2_HOVER", "x": 1, "y": 417, "width": 119, "height": 77, "pivotx": 59, "pivoty": 38 },
+	"sprite_10": { "id": "BG_VIDEOPREVIEW_3_HOVER", "x": 1, "y": 496, "width": 119, "height": 77, "pivotx": 59, "pivoty": 38 },
+	"sprite_11": { "id": "BG_VIDEOPREVIEW_4_HOVER", "x": 122, "y": 417, "width": 119, "height": 77, "pivotx": 59, "pivoty": 38 },
+	"sprite_12": { "id": "BG_VIDEOPREVIEW_5", "x": 122, "y": 496, "width": 119, "height": 77, "pivotx": 59, "pivoty": 38 },
+	"sprite_13": { "id": "BG_VIDEOPREVIEW_5_HOVER", "x": 243, "y": 417, "width": 119, "height": 77, "pivotx": 59, "pivoty": 38 }
+}
