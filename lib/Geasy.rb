@@ -126,19 +126,31 @@ module Geasy
 	# Author: J. Santos
 	class ImageManager
 
-		attr_accessor :sprites
-
-		def sprites
-			@sprites
-		end
+		def [](value)
+			if (@sprites[value] == nil) && ((tmp = @cache[value]) != nil)
+				fromFile(value, @cache[value])
+			end
+			@sprites[value]
+		end			
 
 		def initialize()
 			@sprites = {}
+			@cache = {}
 		end
 
 		# Remove todas as imagens salvas.
 		def clear
 			@sprites = {}
+			self
+		end
+
+		# Coloca a configuração em cache para quando for utilizada fazer,
+		# automaticamente, o carregamento.
+		def cache(options)
+			options.each do |name, file|
+				@cache[name] = file
+			end
+			self
 		end
 
 		def fromFile(id, file)
