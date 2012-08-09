@@ -16,7 +16,7 @@ $window.show
 
 
 =begin
-	require('Geasy')
+	require('geasy')
 	
 	color = Gosu::Color.new(Geasy::Color.fadeTo(0xffffffff, 0.5))
 	puts '----'

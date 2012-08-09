@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-require 'Geasy'
-require 'Chingu'
+require 'geasy'
+require 'chingu'
 
 # Chipmunk steps.
 # @see http://beoran.github.com/chipmunk/#Space

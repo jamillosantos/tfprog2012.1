@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-require 'Geasy'
-require 'Chingu'
+require 'geasy'
+require 'chingu'
 
 Kernel.r 'screen/Game.rb'
 Kernel.r 'chars/Bird.rb'
