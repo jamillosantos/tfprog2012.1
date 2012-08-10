@@ -6,7 +6,8 @@ module Kernel
 	end
 end
 
-$: << File.dirname(__FILE__) + File::SEPARATOR + '/lib'
+$: << File.dirname(__FILE__) + File::SEPARATOR + 'lib'
+GFX = File.dirname(__FILE__) + File::SEPARATOR + 'gfx'
 
 Kernel.r 'MainWindow'
 
