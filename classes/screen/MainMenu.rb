@@ -43,14 +43,42 @@ class MainMenu < Game
 
 		@floor[:shape].e = 0.3
 		@floor[:shape].u = 0.3
+		@floor[:shape].collision_type = :Floor
 
-	    self.space().add_static_shape(@floor[:shape])
+	    self.space.add_static_shape(@floor[:shape])
+
+		self.space.add_collision_func(:Char, :Floor) do |char, floor|
+			puts "Colidiu essa BUDEGA!!"
+			true
+	    end
+	    #self.space.add_collision_handler(:Char, :Floor, BridgeCollisionHandler.new)
 	end
 
 	def update
-		@parallaxes.each do |parallax|
-			parallax.camera_x += 1
-		end
+		#@parallaxes.each do |parallax|
+		#	parallax.camera_x += 1
+		#end
 		super
+	end
+end
+
+class BridgeCollisionHandler
+	def begin(a, b, arbiter)
+		puts 'BridgeCollisionHandler::begin'
+		puts a.inspect
+		puts b.inspect
+		puts arbiter.inspect
+	end
+
+	def pre_solve(a, b)
+		puts 'pre_solve'
+	end
+
+	def post_solve(arbiter)
+		puts 'post_solve'
+	end
+
+	def separate()
+		puts 'Separate!!!'
 	end
 end
