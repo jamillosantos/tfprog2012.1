@@ -5,8 +5,10 @@ require 'chingu'
 
 Kernel.r 'screen/Game.rb'
 Kernel.r 'chars/Bird.rb'
+Kernel.r 'collisions/Char.rb'
 
 class MainMenu < Game
+	traits :timer
 	def initialize(options = {})
 		super(options)
 
@@ -28,7 +30,8 @@ class MainMenu < Game
 		$imageManager.cache({'birds'=>'config/INGAME_BIRDS.json'});
 
 		Bird.create(:image_prefix => 'BIRD_RED', :x=>200, :y=>200, :zorder=>5).input = {
-			:up => :jump,
+			:up => :startJump,
+			:released_up => :jump,
 			:holding_left => :moveLeft,
 			:holding_right => :moveRight,
 		}
@@ -47,11 +50,11 @@ class MainMenu < Game
 
 	    self.space.add_static_shape(@floor[:shape])
 
-		self.space.add_collision_func(:Char, :Floor) do |char, floor|
-			puts "Colidiu essa BUDEGA!!"
-			true
-	    end
-	    #self.space.add_collision_handler(:Char, :Floor, BridgeCollisionHandler.new)
+		#self.space.add_collision_func(:Char, :Floor) do |char, floor|
+		#	puts "Colidiu essa BUDEGA!!"
+		#	true
+	    #end
+	    self.space.add_collision_handler(:Char, :Floor, MadBirds::Collisions::Char.new)
 	end
 
 	def update
@@ -59,26 +62,5 @@ class MainMenu < Game
 		#	parallax.camera_x += 1
 		#end
 		super
-	end
-end
-
-class BridgeCollisionHandler
-	def begin(a, b, arbiter)
-		puts 'BridgeCollisionHandler::begin'
-		puts a.inspect
-		puts b.inspect
-		puts arbiter.inspect
-	end
-
-	def pre_solve(a, b)
-		puts 'pre_solve'
-	end
-
-	def post_solve(arbiter)
-		puts 'post_solve'
-	end
-
-	def separate()
-		puts 'Separate!!!'
 	end
 end
