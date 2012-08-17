@@ -1,0 +1,27 @@
+{
+	"strength": 0.7,
+	"life": 1,
+	"defense": 0.1,
+	"material": "RED_BIRD",
+	"body": {
+		"weight": 2,
+		"inertia": "INF",
+		"velocity": {
+			"limit": 50,
+		}
+	},
+	"shape": {
+		"id": "BIRD_CIRCLE_RED",
+		"elasticity": 0.7,
+		"friction": 0.5,
+		"collision": "Char",
+		"surfaceVelocity": {
+			"x": 0,
+			"y": 0
+		}
+	},
+	"collision":
+	{
+		"sounds": ["sfx/Bird_Red_Collision_1.mp3","sfx/Bird_Red_Collision_2.mp3"]
+	},
+}
