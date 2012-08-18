@@ -11,6 +11,8 @@ GFX = File.dirname(__FILE__) + File::SEPARATOR + 'gfx'
 
 Kernel.r 'MainWindow'
 
+$config = Geasy::Config.new
+
 $window = MainWindow.new
 $window.show
 

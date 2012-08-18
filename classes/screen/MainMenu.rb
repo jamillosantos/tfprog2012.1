@@ -29,7 +29,8 @@ class MainMenu < Game
 		$imageManager.cache({'menuGeneral'=>'config/INGAME_MENU_GENERAL.json'});
 		$imageManager.cache({'birds'=>'config/INGAME_BIRDS.json'});
 
-		Bird.create(:image_prefix => 'BIRD_RED', :x=>200, :y=>200, :zorder=>5, :center_x=>0.5, :center_y=>0.5).input = {
+		bird = Bird.create('redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5)
+		bird.input = {
 			:x => :startJump,
 			:released_x => :jump,
 			:holding_left => :moveLeft,

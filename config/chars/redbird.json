@@ -1,14 +1,16 @@
 {
-	"strength": 0.7,
+	"strength": 1,
 	"life": 1,
 	"defense": 0.1,
 	"material": "RED_BIRD",
+	"imagePrefix": "BIRD_RED",
 	"body": {
-		"weight": 2,
-		"inertia": "INF",
-		"velocity": {
-			"limit": 50,
-		}
+		"weight": 2
+	},
+	"sprites":
+	{
+		"stand":[""],
+		"hurt": [""]
 	},
 	"shape": {
 		"id": "BIRD_CIRCLE_RED",
@@ -20,8 +22,12 @@
 			"y": 0
 		}
 	},
+	"crosshair":
+	{
+		"radius": 50
+	},
 	"collision":
 	{
-		"sounds": ["sfx/Bird_Red_Collision_1.mp3","sfx/Bird_Red_Collision_2.mp3"]
-	},
+		"sounds": ["sfx/Bird_Red_Collision_1.mp3.wav","sfx/Bird_Red_Collision_2.mp3.wav"]
+	}
 }

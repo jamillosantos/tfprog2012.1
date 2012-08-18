@@ -28,6 +28,7 @@ Dependências
 
 	[Ver documentação](http://rdoc.info/github/ippa/chingu/)
 
+* * *
 
 Para instalá-las utilize o comando abaixo:
 
@@ -36,7 +37,7 @@ Para instalá-las utilize o comando abaixo:
 Clone e comece a rodar
 ----------------------
 
-Após clonar o repositório, pela via normal. Faz-se necessário inicialiar os submódulos utilizados.
+Após clonar o repositório, pela via normal. Faz-se necessário inicializar os submódulos utilizados.
 
 	$ git submodule update --init
 
