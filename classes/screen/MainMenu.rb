@@ -8,9 +8,13 @@ Kernel.r 'chars/Bird.rb'
 Kernel.r 'collisions/Char.rb'
 
 class MainMenu < Game
-	traits :timer
+	traits :timer, :viewport
+
 	def initialize(options = {})
 		super(options)
+
+		self.viewport.lag = 0
+		self.viewport.game_area = [0, 0, 1000, 480]
 
 		@parallaxes = []
 
@@ -29,8 +33,8 @@ class MainMenu < Game
 		$imageManager.cache({'menuGeneral'=>'config/INGAME_MENU_GENERAL.json'});
 		$imageManager.cache({'birds'=>'config/INGAME_BIRDS.json'});
 
-		bird = Bird.create('redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5)
-		bird.input = {
+		@bird = Bird.create('redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5)
+		@bird.input = {
 			:x => :startJump,
 			:released_x => :jump,
 			:holding_left => :moveLeft,
@@ -66,6 +70,7 @@ class MainMenu < Game
 		#@parallaxes.each do |parallax|
 		#	parallax.camera_x += 1
 		#end
+		self.viewport.center_around(@bird)
 		super
 	end
 end

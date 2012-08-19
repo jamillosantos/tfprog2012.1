@@ -176,6 +176,8 @@ class Char < Chingu::GameObject
 			self.x = self.body.p.x
 			self.y = self.body.p.y
 
+			#$window.trans
+
 			@crossHair.x = self.x + (@crossHairRadius*Math.cos(self.weapons.angle))*@turned
 			@crossHair.y = self.y + (@crossHairRadius*Math.sin(self.weapons.angle))
 		end

@@ -24,8 +24,24 @@ class MainWindow < Chingu::Window
 			close
 		elsif id == Gosu::KbReturn
 			push_game_state(MainMenu)
+		elsif id == Gosu::KbF12
+			$window.screenshot('teste.png')
+		elsif id == Gosu::KbF3
+			puts self.factor
+			self.factor=10
+		elsif id == Gosu::KbF1
+		self.factor=(2)
+			@rotation ||= 0
+			@rotation += 1
+		elsif id == Gosu::KbF2
+			@rotation ||= 0
+			@rotation -= 1
 		else
 			super(id)
 		end
+	end
+
+	def draw
+		super
 	end
 end
