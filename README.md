@@ -28,6 +28,8 @@ Dependências
 
 	[Ver documentação](http://rdoc.info/github/ippa/chingu/)
 
+5.	RMagick
+
 * * *
 
 Para instalá-las utilize o comando abaixo:
