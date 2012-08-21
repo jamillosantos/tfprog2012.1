@@ -6,6 +6,7 @@ require 'chingu'
 Kernel.r 'screen/Game.rb'
 Kernel.r 'chars/Bird.rb'
 Kernel.r 'collisions/Char.rb'
+Kernel.r 'maps/Map.rb'
 
 class MainMenu < Game
 	traits :timer, :viewport
@@ -14,7 +15,7 @@ class MainMenu < Game
 		super(options)
 
 		self.viewport.lag = 0
-		self.viewport.game_area = [0, 0, 1000, 480]
+		self.viewport.game_area = [0, 0, 1000, 1000]
 
 		@parallaxes = []
 
@@ -33,7 +34,7 @@ class MainMenu < Game
 		$imageManager.cache({'menuGeneral'=>'config/INGAME_MENU_GENERAL.json'});
 		$imageManager.cache({'birds'=>'config/INGAME_BIRDS.json'});
 
-		@bird = Bird.create('redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5)
+		@bird = Bird.create('redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
 		@bird.input = {
 			:x => :startJump,
 			:released_x => :jump,
@@ -45,19 +46,22 @@ class MainMenu < Game
 			:holding_down => :decAngle,
 		}
 
-		@floor = {
-			:body=>(tmpBody = CP::Body.new(Geasy::INFINITY, Geasy::INFINITY)),
-		    :shape=>CP::Shape::Segment.new(tmpBody, CP::Vec2.new(0,283), CP::Vec2.new(1000, 283), 1)
-		}
+		@floor = Map.create({});
 
-		@floor[:body].p = CP::Vec2.new(0, 0)
-	    @floor[:body].v = CP::Vec2.new(0, 0)
+		#
+		#@floor = {
+		#	:body=>(tmpBody = CP::Body.new(Geasy::INFINITY, Geasy::INFINITY)),
+		#    :shape=>CP::Shape::Segment.new(tmpBody, CP::Vec2.new(0,283), CP::Vec2.new(1000, 283), 1)
+		#}
 
-		@floor[:shape].e = 0.3
-		@floor[:shape].u = 0.3
-		@floor[:shape].collision_type = :Floor
+		#@floor[:body].p = CP::Vec2.new(0, 0)
+	    #@floor[:body].v = CP::Vec2.new(0, 0)
 
-	    self.space.add_static_shape(@floor[:shape])
+		#@floor[:shape].e = 0.3
+		#@floor[:shape].u = 0.3
+		#@floor[:shape].collision_type = :Floor
+
+	    self.space.add_static_shape(@floor.shapes.first)
 
 		#self.space.add_collision_func(:Char, :Floor) do |char, floor|
 		#	puts "Colidiu essa BUDEGA!!"

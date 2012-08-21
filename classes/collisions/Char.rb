@@ -4,7 +4,7 @@ module MadBirds
 		class Char
 			def begin(a, b, arbiter)
 				puts 'MadBirds::Collisions::Char::begin()'
-				a.object.groundKick
+				a.object.groundKick if arbiter.first_contact?
 				true
 			end
 		

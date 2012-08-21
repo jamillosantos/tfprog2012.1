@@ -120,6 +120,7 @@ class Char < Chingu::GameObject
 		def groundKick
 			#self.factor_x = 0.5
 			@groundKickTime ||= 0
+			puts 'Char::groundKick'
 			if ((Gosu::milliseconds - @groundKickTime) > 300)
 				Gosu::Sound["Bird_Red_Collision_2.mp3.wav"].play
 				@groundKickTime = Gosu::milliseconds()
@@ -168,7 +169,7 @@ class Char < Chingu::GameObject
 			super
 
 			# Synchronizes the body and Gosu properties
-			self.image = @images[(((Gosu::milliseconds % 1100) > 1000)?1:0)]
+			self.image = @images[(((Gosu::milliseconds % 5100) > 5000)?1:0)]
 
 			self.factor_y = 1 - (self.body.v.y/self.body.v_limit)*0.1
 			self.factor_x = @turned + (self.body.v.y/self.body.v_limit)*0.1*@turned
@@ -180,5 +181,8 @@ class Char < Chingu::GameObject
 
 			@crossHair.x = self.x + (@crossHairRadius*Math.cos(self.weapons.angle))*@turned
 			@crossHair.y = self.y + (@crossHairRadius*Math.sin(self.weapons.angle))
+
+			#### a.x = @passarovemelhor.x + a.xRelativo
+			
 		end
 end

@@ -16,7 +16,6 @@ $config = Geasy::Config.new
 $window = MainWindow.new
 $window.show
 
-
 =begin
 	require('geasy')
 	

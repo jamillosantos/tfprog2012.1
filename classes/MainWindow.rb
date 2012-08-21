@@ -41,6 +41,10 @@ class MainWindow < Chingu::Window
 		end
 	end
 
+	def update
+		super
+	end
+
 	def draw
 		super
 	end
