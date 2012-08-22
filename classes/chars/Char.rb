@@ -19,12 +19,10 @@ class Char < Chingu::GameObject
 
 		@maxVX = 100
 
-		@strength = @config['strength']
+		@strength = @config[:strength]
 
-		puts @config['imagePrefix']
-
-		if !@config['imagePrefix'].nil?
-			@images = [$imageManager['birds'].sprites[@config['imagePrefix']+'_1'].image, $imageManager['birds'].sprites[@config['imagePrefix'] + '_BLINK'].image]
+		if !@config[:imagePrefix].nil?
+			@images = [$imageManager['birds'].sprites[@config[:imagePrefix]+'_1'].image, $imageManager['birds'].sprites[@config[:imagePrefix] + '_BLINK'].image]
 		end
 
 		self._setupShape()
@@ -37,7 +35,7 @@ class Char < Chingu::GameObject
 	protected
 
 		def _initBody
-			CP::Body.new(@config['body']['weight'], Geasy::INFINITY)
+			CP::Body.new(@config[:body][:weight], Geasy::INFINITY)
 		end
 
 		def _setupBody
@@ -52,25 +50,25 @@ class Char < Chingu::GameObject
 		end
 
 		def _initShape
-			shape = $config['Shapes'][@config['shape']['id']]
-			if shape['type'] == 'CIRCLE'
-				CP::Shape::Circle.new(self.body, shape['radius'], CP::Vec2.new(shape['offsetX'], shape['offsetY']))
+			shape = $config['Shapes'][@config[:shape][:id].to_sym]
+			if shape[:type] == 'CIRCLE'
+				CP::Shape::Circle.new(self.body, shape[:radius], CP::Vec2.new(shape[:offsetX], shape[:offsetY]))
 			end
 		end
 
 		def _setupShape
 			@shape = self._initShape
-			shape = @config['shape']
+			shape = @config[:shape]
 			self.shape.object = self
-			self.shape.e = shape['elasticity']
-			self.shape.u = shape['friction']
-			self.shape.collision_type = shape['collision'].to_sym
+			self.shape.e = shape[:elasticity]
+			self.shape.u = shape[:friction]
+			self.shape.collision_type = shape[:collision].to_sym
 			self.parent().space.add_shape(self.shape)
 		end
 
 		def _setupCrossHair
 			@crossHair = Chingu::GameObject.create(:image => Gosu::Image.new($window, 'gfx/crosshair.png'), :center_x => 0.5, :center_y => 0.5)
-			@crossHairRadius = @config['crosshair']['radius']
+			@crossHairRadius = @config[:crosshair][:radius]
 		end
 
 	public

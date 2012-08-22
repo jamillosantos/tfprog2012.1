@@ -1,3 +1,3 @@
 [submodule "lib/chingu"]
 	path = lib/chingu
-	url = https://github.com/ippa/chingu.git
+	url = git@github.com:jamillosantos/chingu.git

@@ -8,8 +8,11 @@ module Geasy
 
 		def initialize(options)
 			super(options)
+
+			@setupOptions = options
 			self._setupBody
 			self._setupShapes
+			@setupOptions = nil
 		end
 
 		protected
