@@ -1,4 +1,6 @@
 
+require 'chipmunk'
+
 # É uma camada construída sobre o Gosu com certas facilidades.
 # 
 # Author:: J. Santos
@@ -6,6 +8,8 @@
 module Geasy
 
 	INFINITY = 1.0/0
+
+	VZERO = CP::Vec2.new(0, 0)
 
 	# Faz transformações de cores.
 	class Color

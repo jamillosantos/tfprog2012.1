@@ -68,6 +68,14 @@ class MainMenu < Game
 		#	true
 	    #end
 	    self.space.add_collision_handler(:Char, :Floor, MadBirds::Collisions::Char.new)
+
+	    self.input = {
+	    	:q => :A
+	    }
+	end
+
+	def A
+		@floor.difCircle(300, 283, 30);
 	end
 
 	def update
