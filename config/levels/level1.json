@@ -5,16 +5,21 @@
 		"moment":"INF"
 	},
 	"elasticity":0.4,
-	"friction":0.4,
+	"friction":0.7,
 	"shapes": [
 		{
 			"type":"poly",
 			"verts": [
 				[0.0, 483.0], [1000.0, 483.0], [1000.0, 283.0], [0.0, 283.0]
+			]
+		},
+		{
+			"type":"poly",
+			"verts": [
+				[0.0, 283.0], [300.0, 283.0], [0.0, 233.0]
 			],
-			"elasticity":0.3,
-			"friction":0.3
+			"elasticity":1.0
 		}
 	],
-	"terrain": ""
+	"bgColor":"0xFFCCAA"
 }

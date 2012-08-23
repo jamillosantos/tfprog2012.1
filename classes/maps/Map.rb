@@ -6,7 +6,10 @@ require 'clipper'
 
 class BaseMap < Geasy::CPObject
 
+	attr_accessor :bgColor
+
 	def initialize(options)
+		self.bgColor = options[:bgColor] unless options[:bgColor].nil?
 		super(options)
 	end
 
@@ -22,9 +25,6 @@ class BaseMap < Geasy::CPObject
 
 		def _initShapes
 			@setupOptions[:shapes].map do |shape|
-				a = nil
-				b = 123
-				puts a || b
 				if shape[:type] == "poly"
 					result = CP::Shape::Poly.new(self.body, shape[:verts].toVec2, ((shape[:offset].nil?)? Geasy::VZERO : shape[:offset].toVec2))
 				elsif shape[:type] == "circle"
@@ -32,12 +32,29 @@ class BaseMap < Geasy::CPObject
 				else
 					raise ArgumentError.new('Forma "%s" não implementada.' % shape.type)
 				end
-				result.e = shape[:elasticity] unless shape[:elasticity].nil? 
-				result.u = shape[:friction] unless shape[:friction].nil?
-				
-				puts result.e.inspect
+				result.e = shape[:elasticity] || @setupOptions[:elasticity] || result.e 
+				result.u = shape[:friction] || @setupOptions[:friction] || result.u
 				result
 			end unless @setupOptions[:shapes].nil?;
+		end
+
+	public
+		def bgColor
+			@bgColor
+		end
+
+		def bgColor=(value)
+			if (value.is_a? Array)
+				@bgColor = Array.new(4) { |i| value[i%@bgColor.size] }
+			else
+				puts value.inspect, value.to_i
+				@bgColor = Array.new(4, Gosu::Color.new(value.to_i))
+			end
+		end
+
+		def draw
+			$window.draw_quad(0, 0, @bgColor[0], $window.width, 0, @bgColor[1], $window.width, $window.height, @bgColor[2], 0, $window.height, @bgColor[3]) unless (self.bgColor.nil?);
+			super
 		end
 end
 

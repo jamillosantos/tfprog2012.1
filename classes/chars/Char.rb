@@ -17,7 +17,7 @@ class Char < Chingu::GameObject
 
 		self._setupBody
 
-		@maxVX = 100
+		@maxVX = 50
 
 		@strength = @config[:strength]
 
@@ -128,9 +128,9 @@ class Char < Chingu::GameObject
 		def moveLeft
 			self.turnLeft
 			if (self.grounded?)
-				i = 1
+				i = 3
 			else
-				i = 0.3
+				i = 1
 			end
 			if (self.body.v.x > 0)
 				i *= 3
