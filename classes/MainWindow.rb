@@ -17,12 +17,14 @@ class MainWindow < Chingu::Window
 		self.caption = 'Mad Birds'
 
 		push_game_state(MainMenu)
+
+		self.input = {
+			:escape => :exit
+		}
 	end
 
 	def button_down(id)
-		if id == Gosu::KbEscape
-			close
-		elsif id == Gosu::KbReturn
+		if id == Gosu::KbReturn
 			push_game_state(MainMenu)
 		elsif id == Gosu::KbF12
 			$window.screenshot('teste.png')
