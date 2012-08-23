@@ -22,7 +22,7 @@ class Char < Chingu::GameObject
 		@strength = @config[:strength]
 
 		if !@config[:imagePrefix].nil?
-			@images = [$imageManager['birds'].sprites[@config[:imagePrefix]+'_1'].image, $imageManager['birds'].sprites[@config[:imagePrefix] + '_BLINK'].image]
+			@images = [$imageManager[:birds].sprites[@config[:imagePrefix]+'_1'].image, $imageManager[:birds].sprites[@config[:imagePrefix] + '_BLINK'].image]
 		end
 
 		self._setupShape()
