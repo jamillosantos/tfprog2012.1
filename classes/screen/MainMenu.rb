@@ -15,26 +15,28 @@ class MainMenu < Game
 		super(options)
 
 		self.viewport.lag = 0
-		self.viewport.game_area = [0, 0, 1000, 1000]
+		self.viewport.game_area = [0.0, 0.0, 1000.0, 1000.0]
 
 		@parallaxes = []
 
-#		@parallaxes << Gosu::Image.new($window, GFX+File::SEPARATOR+"BLUE_GRASS_BG_1.png", true)
-
 		tmp = Chingu::Parallax.create(:x => 0, :y => 0, :rotation_center => :top_left, :zorder => 1)
-		tmp.add_layer(:image => GFX+File::SEPARATOR+"BLUE_GRASS_BG_1.png", :damping => 50, :center => 0)
+		tmp.add_layer(:image => GFX+File::SEPARATOR+"BLUE_GRASS_BG_1.png", :damping => 20, :center => 0)
 		@parallaxes << tmp
 
-		tmp = Chingu::Parallax.create(:x => 0, :y => 283, :rotation_center => :top_left, :zorder => 2)
+		tmp = Chingu::Parallax.create(:x => 0, :y => 283, :rotation_center => :top_left, :zorder => 10)
 		tmp << {:image => GFX+File::SEPARATOR+"BLUE_GRASS_FG_1.png", :y=>100, :damping => 1, :center => 0}
 		@parallaxes << tmp
 
-		tmp = Chingu::Parallax.create(:x => 0, :y => tmp.y-30, :rotation_center => :top_left, :zorder => 2)
+		tmp = Chingu::Parallax.create(:x => 0, :y => tmp.y-30, :rotation_center => :top_left, :zorder => 10)
 		tmp << {:image => GFX+File::SEPARATOR+"BLUE_GRASS_FG_2.png", :y=>-100, :damping => 1, :center => 0}
 		@parallaxes << tmp
 
-		$imageManager.cache({'menuGeneral'=>'config/INGAME_MENU_GENERAL.json'});
-		$imageManager.cache({'birds'=>'config/INGAME_BIRDS.json'});
+		tmp = Chingu::Parallax.create(:x => 0, :y => tmp.y-30, :rotation_center => :top_left, :zorder => 2)
+		tmp << {:image => GFX+File::SEPARATOR+"BLUE_GRASS_BG_3.png", :y=>-100, :damping => 1, :center => 0}
+		@parallaxes << tmp
+
+		$imageManager.cache({:menuGeneral=>'config/INGAME_MENU_GENERAL.json'});
+		$imageManager.cache({:birds=>'config/INGAME_BIRDS.json'});
 
 		@bird2 = Bird.create('redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
 
@@ -80,8 +82,9 @@ class MainMenu < Game
 	def update
 		self.viewport.center_around(@bird)
 		@parallaxes.each do |parallax|
-			parallax.x = self.viewport.x.round
-			parallax.camera_x = self.viewport.x.round
+			#parallax.x = self.viewport.x.round
+			parallax.camera_x = self.viewport.x
+			parallax.camera_y = self.viewport.y
 		end
 		super
 	end
