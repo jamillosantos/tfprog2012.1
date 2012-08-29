@@ -37,24 +37,19 @@ class Char < Chingu::GameObject
 		self._setupCrossHair
 	end
 
-	def testando
-		@body.t = (@body.t + Math::PI/10)
-	end
-
 	protected
 
 		def _initBody
 			CP::Body.new(@config[:body][:weight], Geasy::INFINITY)
-			#CP::Body.new(@config[:body][:weight], 1000)
 		end
 
 		def _setupBody
 			@body = self._initBody
 
-			self.body.p.x = 200
-			self.body.p.y = 0
+			#self.body.p.x = 50 + $window.width*rand() - 100 
+			#self.body.p.y = 0
 			
-			self.body.v_limit = 50
+			#self.body.v_limit = 50
 			self.body.object = self
 			self.parent().space.add_body(self.body)
 		end
@@ -190,6 +185,10 @@ class Char < Chingu::GameObject
 			self.angle = @body.a.degrees
 			# puts self.angle
 
+			puts self.body().p.inspect, self.body().v.inspect, self.shape.surface_v, '--------'
+
+			# self.body().t = 1
+
 			# Crosshair
 			@crossHair.x = self.x + (@crossHairRadius*Math.cos(self.weapons.angle))*@turned
 			@crossHair.y = self.y + (@crossHairRadius*Math.sin(self.weapons.angle))
@@ -208,6 +207,5 @@ class Char < Chingu::GameObject
 					glVertex2f(self.x - self.parent().viewport.x + (17 * Math.cos(theta)), self.y - self.parent().viewport.y + 17 * Math.sin(theta)) 
 					glEnd() 
 			}
-			# $window.draw_circle(self.x, self.y, 17, Gosu::Black, 100000000000)
 		end
 end

@@ -7,6 +7,8 @@ class MainMenu < Chingu::GameState
 	def initialize(options = {})
 		super(options)
 
+		a = Chingu::GameObject.create(:image => GFX+File::SEPARATOR+"BLUE_GRASS_FG_2.png")
+
 		self.input = {
 			:a => :launchPlay
 		}

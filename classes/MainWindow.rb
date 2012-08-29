@@ -14,9 +14,15 @@ class MainWindow < Chingu::Window
 
 		$imageManager = Geasy::ImageManager.new()
 
+		$imageManager.cache({:menuGeneral=>'config/INGAME_MENU_GENERAL.json'});
+		$imageManager.cache({:birds=>'config/INGAME_BIRDS.json'});
+		$imageManager.cache({:blocks=>'config/INGAME_BLOCKS_BASIC.json'});
+
+		#$imageManager[:blocks]
+
 		self.caption = 'Mad Birds'
 
-		push_game_state(MainMenu)
+		push_game_state(GameExtended)
 
 		self.input = {
 			:escape => :exit

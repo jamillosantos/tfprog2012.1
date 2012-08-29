@@ -9,7 +9,7 @@ Kernel.r 'collisions/Char.rb'
 Kernel.r 'maps/Map.rb'
 
 class GameExtended < Game
-	traits :timer, :viewport
+	traits :viewport
 
 	def initialize(options = {})
 		super(options)
@@ -24,21 +24,18 @@ class GameExtended < Game
 		@parallaxes << tmp
 
 		tmp = Chingu::Parallax.create(:x => 0, :y => 283, :rotation_center => :top_left, :zorder => 10)
-		tmp << {:image => GFX+File::SEPARATOR+"BLUE_GRASS_FG_1.png", :y=>100, :damping => 1, :center => 0}
+		tmp << {:image => GFX+File::SEPARATOR+"BLUE_GRASS_FG_1.png", :y=>0, :damping => 1, :center => 0}
 		@parallaxes << tmp
 
 		tmp = Chingu::Parallax.create(:x => 0, :y => tmp.y-30, :rotation_center => :top_left, :zorder => 10)
-		tmp << {:image => GFX+File::SEPARATOR+"BLUE_GRASS_FG_2.png", :y=>-100, :damping => 1, :center => 0}
+		tmp << {:image => GFX+File::SEPARATOR+"BLUE_GRASS_FG_2.png", :y=>0, :damping => 1, :center => 0}
 		@parallaxes << tmp
 
 		tmp = Chingu::Parallax.create(:x => 0, :y => tmp.y-30, :rotation_center => :top_left, :zorder => 2)
-		tmp << {:image => GFX+File::SEPARATOR+"BLUE_GRASS_BG_3.png", :y=>-100, :damping => 1, :center => 0}
+		tmp << {:image => GFX+File::SEPARATOR+"BLUE_GRASS_BG_3.png", :y=>0, :damping => 1, :center => 0}
 		@parallaxes << tmp
 
-		$imageManager.cache({:menuGeneral=>'config/INGAME_MENU_GENERAL.json'});
-		$imageManager.cache({:birds=>'config/INGAME_BIRDS.json'});
-
-		@bird2 = Bird.create('redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
+		# @bird2 = Bird.create('redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
 
 		@bird = Bird.create('redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
 		@bird.input = {
@@ -52,7 +49,13 @@ class GameExtended < Game
 			:holding_down => :decAngle,
 		}
 
-		@floor = Map.create('levels/level1');
+		@floor = Map.create(:space=>self.space, :config=>'levels/level1');
+		# @floor = MapElement.create(:space=>self.space, :static=>true, :x=>0, :y=>0, :body=>{ :weight=>Geasy::INFINITY, :moment=>Geasy::INFINITY }, :shapes=>{ :type => :poly, :verts=>[[0.0, 483.0], [1000.0, 483.0], [1000.0, 283.0], [0.0, 283.0]], :friction=>5, :elasticity=>1 })
+
+		#@floorBody = CP::Body.new(Geasy::INFINITY, Geasy::INFINITY)
+		#@floorShape = CP::Shape::Poly.new(@floorBody, [[0.0, 483.0], [1000.0, 483.0], [1000.0, 283.0], [0.0, 283.0]].toVec2, CP::Vec2.new(0,0))
+		# self.space.add_body(@floorBody);
+		#self.space.add_static_shape(@floorShape);
 
 		#
 		#@floor = {
@@ -68,15 +71,11 @@ class GameExtended < Game
 		#@floor[:shape].u = 0.3
 		#@floor[:shape].collision_type = :Floor
 
-	    @floor.shapes.each do |shape|
-			self.space.add_static_shape(shape)
-	    end
-
 		#self.space.add_collision_func(:Char, :Floor) do |char, floor|
 		#	puts "Colidiu essa BUDEGA!!"
 		#	true
 	    #end
-	    self.space.add_collision_handler(:Char, :Floor, MadBirds::Collisions::Char.new)
+	    #self.space.add_collision_handler(:Char, :Floor, MadBirds::Collisions::Char.new)
 	end
 
 	def update

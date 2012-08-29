@@ -28,6 +28,7 @@ module Geasy
 					body.p.x = self.x
 					body.p.y = self.y
 				end
+				body.object = self
 				body
 			end
 
@@ -38,15 +39,17 @@ module Geasy
 			def _initShapes
 				result = []
 				unless (shapes = @setupOptions[:shapes]).nil?
-					if shapes.is_a? Array
-						shapes.each do |shape|
-							tmp = CP::Shape::fromObject(@body, shape)
-							tmp.collision_type = shape[:collisionType] || @setupOptions[:collisionType] || nil
-							result << tmp
+					shapes = [shapes] unless shapes.is_a? Array
+					shapes.each do |shape|
+						tmp = CP::Shape::fromObject(@body, shape)
+						tmp.object = self
+						ct = shape[:collisionType] || @setupOptions[:collisionType] || nil
+						unless ct.nil?
+							tmp.collision_type = (ct.is_a?(String)? ct.to_sym : ct)
 						end
-					else
-						result << CP::Shape::fromObject(@body, shapes)
-						result[0].collision_type = shapes[:collisionType] || @setupOptions[:collisionType] || nil
+						tmp.e = shape[:elasticity] || @setupOptions[:elasticity] || tmp.e
+						tmp.u = shape[:friction] || @setupOptions[:friction] || tmp.u
+						result << tmp
 					end
 				end
 				result
@@ -60,13 +63,12 @@ module Geasy
 			end
 
 			def _addToSpace
-				puts '#######################################'
-				@space.add_body(@body)
 				if @setupOptions[:static]
 					@shapes.each do |shape|
 						@space.add_static_shape(shape)
 					end
 				else
+					@space.add_body(@body)
 					@shapes.each do |shape|
 						@space.add_shape(shape)
 					end
@@ -89,6 +91,7 @@ module Geasy
 			def update
 				self.x = @body.p.x
 				self.y = @body.p.y
+				
 				super
 			end
 	end
