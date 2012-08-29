@@ -24,25 +24,23 @@ class GameExtended < Game
 		@parallaxes << tmp
 
 		tmp = Chingu::Parallax.create(:x => 0, :y => 283, :rotation_center => :top_left, :zorder => 10)
-		tmp << {:image => GFX+File::SEPARATOR+"BLUE_GRASS_FG_1.png", :y=>100, :damping => 1, :center => 0}
+		tmp << {:image => GFX+File::SEPARATOR+"BLUE_GRASS_FG_1.png", :y=>0, :damping => 1, :center => 0}
 		@parallaxes << tmp
 
 		tmp = Chingu::Parallax.create(:x => 0, :y => tmp.y-30, :rotation_center => :top_left, :zorder => 10)
-		tmp << {:image => GFX+File::SEPARATOR+"BLUE_GRASS_FG_2.png", :y=>-100, :damping => 1, :center => 0}
+		tmp << {:image => GFX+File::SEPARATOR+"BLUE_GRASS_FG_2.png", :y=>0, :damping => 1, :center => 0}
 		@parallaxes << tmp
 
 		tmp = Chingu::Parallax.create(:x => 0, :y => tmp.y-30, :rotation_center => :top_left, :zorder => 2)
-		tmp << {:image => GFX+File::SEPARATOR+"BLUE_GRASS_BG_3.png", :y=>-100, :damping => 1, :center => 0}
+		tmp << {:image => GFX+File::SEPARATOR+"BLUE_GRASS_BG_3.png", :y=>0, :damping => 1, :center => 0}
 		@parallaxes << tmp
-
-		$imageManager.cache({:menuGeneral=>'config/INGAME_MENU_GENERAL.json'});
-		$imageManager.cache({:birds=>'config/INGAME_BIRDS.json'});
 
 		@bird2 = Bird.create('redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
 
 		@bird = Bird.create('redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
 		@bird.input = {
 			:x => :startJump,
+			:holding_p => :testando,
 			:released_x => :jump,
 			:holding_left => :moveLeft,
 			:holding_right => :moveRight,
@@ -52,7 +50,7 @@ class GameExtended < Game
 			:holding_down => :decAngle,
 		}
 
-		@floor = Map.create('levels/level1');
+		@floor = Map.create(:space=>self.space, :config=>'levels/level1');
 
 		#
 		#@floor = {
@@ -67,10 +65,6 @@ class GameExtended < Game
 		#@floor[:shape].e = 0.3
 		#@floor[:shape].u = 0.3
 		#@floor[:shape].collision_type = :Floor
-
-	    @floor.shapes.each do |shape|
-			self.space.add_static_shape(shape)
-	    end
 
 		#self.space.add_collision_func(:Char, :Floor) do |char, floor|
 		#	puts "Colidiu essa BUDEGA!!"
