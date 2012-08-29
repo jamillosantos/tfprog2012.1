@@ -12,6 +12,7 @@ module Geasy
 			@setupOptions = options
 			self._setupBody
 			self._setupShapes
+			self._setupConfig
 			@setupOptions = nil
 		end
 
@@ -29,6 +30,9 @@ module Geasy
 
 			def _setupShapes
 				@shapes = self._initShapes()
+			end
+
+			def _setupConfig
 			end
 
 		public

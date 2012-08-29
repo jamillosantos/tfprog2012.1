@@ -12,14 +12,15 @@ module Geasy
 
 	class Sprite
 		attr_accessor :image, :x, :y, :width, :height, :pivotx, :pivoty
+
 		def initialize(options)
-			@image = Gosu::Image.new($window, options['image'], true, options['x'], options['y'], options['width'], options['height'])
-			@x = options['x']
-			@y = options['y']
-			@width = options['width']
-			@height = options['height']
-			@pivotx = options['pivotx']
-			@pivoty = options['pivoty']
+			@image = Gosu::Image.new($window, options[:image], true, options[:x], options[:y], options[:width], options[:height])
+			@x = options[:x]
+			@y = options[:y]
+			@width = options[:width]
+			@height = options[:height]
+			@pivotx = options[:pivotx]
+			@pivoty = options[:pivoty]
 		end
 
 		def image
