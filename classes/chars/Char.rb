@@ -15,14 +15,19 @@ class Char < Chingu::GameObject
 
 		super({})
 
+		unless @config[:center].nil?
+			self.center_x = @config[:center][:x] unless @config[:center][:x].nil?
+			self.center_y = @config[:center][:y] unless @config[:center][:y].nil?
+		end
+
 		self._setupBody
 
-		@maxVX = 50
+		@maxVX = 30
 
 		@strength = @config[:strength]
 
 		if !@config[:imagePrefix].nil?
-			@images = [$imageManager[:birds].sprites[@config[:imagePrefix]+'_1'].image, $imageManager[:birds].sprites[@config[:imagePrefix] + '_BLINK'].image]
+			@images = [$imageManager[:birds].sprites[(@config[:imagePrefix]+'_1').to_sym].image, $imageManager[:birds].sprites[(@config[:imagePrefix] + '_BLINK').to_sym].image]
 		end
 
 		self._setupShape()
@@ -32,10 +37,15 @@ class Char < Chingu::GameObject
 		self._setupCrossHair
 	end
 
+	def testando
+		@body.t = (@body.t + Math::PI/10)
+	end
+
 	protected
 
 		def _initBody
 			CP::Body.new(@config[:body][:weight], Geasy::INFINITY)
+			#CP::Body.new(@config[:body][:weight], 1000)
 		end
 
 		def _setupBody
@@ -43,7 +53,7 @@ class Char < Chingu::GameObject
 
 			self.body.p.x = 200
 			self.body.p.y = 0
-
+			
 			self.body.v_limit = 50
 			self.body.object = self
 			self.parent().space.add_body(self.body)
@@ -141,9 +151,9 @@ class Char < Chingu::GameObject
 		def moveRight
 			self.turnRight
 			if (self.grounded?)
-				i = 1
+				i = 3
 			else
-				i = 0.3
+				i = 1
 			end
 			if (self.body.v.x < 0)
 				i *= 3
@@ -166,21 +176,38 @@ class Char < Chingu::GameObject
 		def update
 			super
 
-			# Synchronizes the body and Gosu properties
+			# Blink
 			self.image = @images[(((Gosu::milliseconds % 5100) > 5000)?1:0)]
 
+			# Velocity deformation
 			self.factor_y = 1 - (self.body.v.y/self.body.v_limit)*0.1
 			self.factor_x = @turned + (self.body.v.y/self.body.v_limit)*0.1*@turned
 
+			# Sync with Chipmunk
 			self.x = self.body.p.x
 			self.y = self.body.p.y
 
-			#$window.trans
+			self.angle = @body.a.degrees
+			# puts self.angle
 
+			# Crosshair
 			@crossHair.x = self.x + (@crossHairRadius*Math.cos(self.weapons.angle))*@turned
 			@crossHair.y = self.y + (@crossHairRadius*Math.sin(self.weapons.angle))
+		end
 
-			#### a.x = @passarovemelhor.x + a.xRelativo
-			
+		def draw
+			super
+			$window.gl {
+				glBegin(GL_LINE_LOOP); 
+					glVertex2f(self.x - self.parent().viewport.x, self.y - self.parent().viewport.y)
+					20.times do |ii|
+						theta = 2 * Math::PI * ii / 20.0
+						glVertex2f(self.x - self.parent().viewport.x + (17 * Math.cos(theta)), self.y - self.parent().viewport.y + 17 * Math.sin(theta)) 
+					end
+					theta = 2 * Math::PI * 0 / 20.0
+					glVertex2f(self.x - self.parent().viewport.x + (17 * Math.cos(theta)), self.y - self.parent().viewport.y + 17 * Math.sin(theta)) 
+					glEnd() 
+			}
+			# $window.draw_circle(self.x, self.y, 17, Gosu::Black, 100000000000)
 		end
 end
