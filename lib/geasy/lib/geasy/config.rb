@@ -6,7 +6,7 @@ module Geasy
 
 		def [](name)
 			if (!@cache[sym = name.gsub('/', File::SEPARATOR).to_sym])
-				@cache[sym] = JSON::parse File.read(File.join(ROOT, 'config', name + '.json')), :symbolize_names => true
+				@cache[sym] = JSON::parse File.read(File.join(ROOT, 'config', name + '.json')), :symbolize_names => true, :allow_nan=>true
 			end
 			@cache[sym]
 		end
