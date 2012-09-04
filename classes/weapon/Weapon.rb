@@ -1,4 +1,21 @@
 
+require 'chingu'
+require 'chipmunk'
+require 'geasy'
+
+class Bullet < Geasy::CPObject
+
+	def initalize(options)
+		@weapon = options[:weapon]
+		super(options)
+	end
+
+	def _afterSetups
+		r = 30
+		self.body.apply_impulse(100, CP::Vec2.new(r*Math.cos(@weapon.weaponManager.angle), r*Math.sin(@weapon.weaponManager.angle)))
+		super
+	end
+end
 
 class Weapon
 	attr_accessor :power, :spread
@@ -45,13 +62,15 @@ class Weapon
 	end
 
 	def shoot
+		#
 	end
 
 	def recharge
+		#
 	end
+end
 
-	def recoil
-	end
+class WeaponBlaster < Weapon
 end
 
 class WeaponManager

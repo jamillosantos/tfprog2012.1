@@ -15,6 +15,7 @@ module Geasy
 			self._setupConfig
 			self._setupBody
 			self._setupShapes
+			self._afterSetups
 			self._addToSpace
 			@setupOptions = nil
 		end
@@ -61,6 +62,9 @@ module Geasy
 			end
 
 			def _setupConfig
+			end
+
+			def _afterSetups
 			end
 
 			def _addToSpace

@@ -48,8 +48,6 @@ class BaseMap < Geasy::CPObject
 
 		def update
 			super
-			# self.body().p.x = 0
-			# self.body().p.y = 0
 		end
 
 		def draw
