@@ -12,14 +12,30 @@ class Array
 end
 
 module CP
+	class Vec2
+		def toVec2
+			self
+		end
+	end
+
 	module Shape
 		def self.fromObject(body, obj)
+			unless obj[:offset].nil?
+				offset = obj[:offset].toVec2
+			else
+				offset = Geasy::VZERO
+			end
+
 			case obj[:type].to_sym
 			when :circle
-				result = CP::Shape::Circle.new(body, obj[:radius], (obj[:offset].is_a?(CP::Vec2) ? obj[:offset] : obj[:offset].toVec2 ))
+				result = CP::Shape::Circle.new(body, obj[:radius], offset)
+			when :rect
+				w = (obj[:width]/2.0)
+				h = (obj[:height]/2.0)
+				result = CP::Shape::Poly.new(body, [CP::Vec2.new(-w, h), CP::Vec2.new(w, h), CP::Vec2.new(w, -h), CP::Vec2.new(-w, -h)], offset)
 			when :poly
 				if (obj[:offset].nil?)
-					result = CP::Shape::Poly.new(body, obj[:verts].map { |v| CP::Vec2.new(v[0], v[1]) }, Geasy::VZERO)
+					result = CP::Shape::Poly.new(body, obj[:verts].toVec2, Geasy::VZERO)
 				else
 					result = CP::Shape::Poly.new(body, obj[:verts], (obj[:offset].is_a?(CP::Vec2) ? obj[:offset] : obj[:offset].toVec2))
 				end

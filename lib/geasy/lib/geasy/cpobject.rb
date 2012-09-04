@@ -27,6 +27,7 @@ module Geasy
 					body = CP::Body.new(body[:weight] || Geasy::INFINITY, body[:moment] || Geasy::INFINITY)
 					body.p.x = self.x
 					body.p.y = self.y
+					body.a = self.angle.radians
 				end
 				body.object = self
 				body
@@ -91,7 +92,9 @@ module Geasy
 			def update
 				self.x = @body.p.x
 				self.y = @body.p.y
-				
+
+				self.angle = self.body.a.degrees
+
 				super
 			end
 	end
