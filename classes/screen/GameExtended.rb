@@ -40,6 +40,7 @@ class GameExtended < Game
 
 		@bird = Bird.create('redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
 		@bird.input = {
+			:space => :shoot,
 			:x => :startJump,
 			:released_x => :jump,
 			:left => :turnLeft,
