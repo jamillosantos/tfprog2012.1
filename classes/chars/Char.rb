@@ -22,7 +22,9 @@ class Char < Chingu::GameObject
 
 		self._setupBody
 
-		@maxVX = 30
+		self.body().v_limit = 70
+
+		@maxVX = 20
 
 		@strength = @config[:strength]
 
@@ -46,7 +48,7 @@ class Char < Chingu::GameObject
 		def _setupBody
 			@body = self._initBody
 
-			#self.body.p.x = 50 + $window.width*rand() - 100 
+			self.body.p.x = 50 + $window.width*rand() - 100 
 			#self.body.p.y = 0
 			
 			#self.body.v_limit = 50
@@ -100,6 +102,7 @@ class Char < Chingu::GameObject
 	
 		def jump
 			puts 'Char::jump'
+			# self.body.v.y = -30
 			self.body.apply_impulse(@jumpImpulse, CP::Vec2.new(0, 0))
 			self
 		end
@@ -130,30 +133,8 @@ class Char < Chingu::GameObject
 			end
 		end
 
-		def moveLeft
-			self.turnLeft
-			if (self.grounded?)
-				i = 3
-			else
-				i = 1
-			end
-			if (self.body.v.x > 0)
-				i *= 3
-			end
-			self.body.v.x = Math.max(self.body.v.x - i, -@maxVX)
-		end
-	
-		def moveRight
-			self.turnRight
-			if (self.grounded?)
-				i = 3
-			else
-				i = 1
-			end
-			if (self.body.v.x < 0)
-				i *= 3
-			end
-			self.body.v.x = Math.min(self.body.v.x + i, @maxVX)
+		def move
+			self.body.v.x = Math.min(Math.max(self.body.v.x + (2*@turned), -@maxVX), @maxVX)
 		end
 
 		def startChangeAngle
@@ -207,5 +188,9 @@ class Char < Chingu::GameObject
 					glVertex2f(self.x - self.parent().viewport.x + (17 * Math.cos(theta)), self.y - self.parent().viewport.y + 17 * Math.sin(theta)) 
 					glEnd() 
 			}
+		end
+
+		def shoot
+			@weapons.shoot
 		end
 end

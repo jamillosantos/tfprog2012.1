@@ -2,6 +2,7 @@
 
 require 'geasy'
 require 'chingu'
+require 'chipmunk'
 
 Kernel.r 'screen/Game.rb'
 Kernel.r 'chars/Bird.rb'
@@ -35,47 +36,27 @@ class GameExtended < Game
 		tmp << {:image => GFX+File::SEPARATOR+"BLUE_GRASS_BG_3.png", :y=>0, :damping => 1, :center => 0}
 		@parallaxes << tmp
 
-		# @bird2 = Bird.create('redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
+		@bird2 = Bird.create('redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
 
 		@bird = Bird.create('redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
 		@bird.input = {
 			:x => :startJump,
 			:released_x => :jump,
-			:holding_left => :moveLeft,
-			:holding_right => :moveRight,
+			:left => :turnLeft,
+			:right => :turnRight,
+			:holding_left => :move,
+			:holding_right => :move,
 			:up => :startChangeAngle,
 			:down => :startChangeAngle,
 			:holding_up => :incAngle,
 			:holding_down => :decAngle,
 		}
 
+		# self.space.add_constraint CP::Constraint::PinJoint.new(@bird.body, @bird2.body, CP::Vec2.new(0,0), CP::Vec2.new(0,0))
+
 		@floor = Map.create(:space=>self.space, :config=>'levels/level1');
-		# @floor = MapElement.create(:space=>self.space, :static=>true, :x=>0, :y=>0, :body=>{ :weight=>Geasy::INFINITY, :moment=>Geasy::INFINITY }, :shapes=>{ :type => :poly, :verts=>[[0.0, 483.0], [1000.0, 483.0], [1000.0, 283.0], [0.0, 283.0]], :friction=>5, :elasticity=>1 })
 
-		#@floorBody = CP::Body.new(Geasy::INFINITY, Geasy::INFINITY)
-		#@floorShape = CP::Shape::Poly.new(@floorBody, [[0.0, 483.0], [1000.0, 483.0], [1000.0, 283.0], [0.0, 283.0]].toVec2, CP::Vec2.new(0,0))
-		# self.space.add_body(@floorBody);
-		#self.space.add_static_shape(@floorShape);
-
-		#
-		#@floor = {
-		#	:body=>(tmpBody = CP::Body.new(Geasy::INFINITY, Geasy::INFINITY)),
-		#	:shape=>CP::Shape::Segment.new(tmpBody, CP::Vec2.new(0,283), CP::Vec2.new(1000, 283), 1)
-		#}
-		#
-
-		#@floor[:body].p = CP::Vec2.new(0, 0)
-	    #@floor[:body].v = CP::Vec2.new(0, 0)
-
-		#@floor[:shape].e = 0.3
-		#@floor[:shape].u = 0.3
-		#@floor[:shape].collision_type = :Floor
-
-		#self.space.add_collision_func(:Char, :Floor) do |char, floor|
-		#	puts "Colidiu essa BUDEGA!!"
-		#	true
-	    #end
-	    #self.space.add_collision_handler(:Char, :Floor, MadBirds::Collisions::Char.new)
+	    # self.space.add_collision_handler(:Char, :Floor, MadBirds::Collisions::Char.new)
 	end
 
 	def update

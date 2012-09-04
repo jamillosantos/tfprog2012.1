@@ -24,7 +24,8 @@ class BaseMap < Geasy::CPObject
 			if ((els = @setupOptions[:elements]).is_a? String)
 				els = $config[@setupOptions[:elements]]
 			end
-			#MapElement.create(:space=>self.space,:image=>$imageManager.ids(:WOOD_CIRCLE_4X4).image, :x=>150, :y=>10, :body=>{ :weight=>10, :moment=>Geasy::INFINITY }, :shapes=>{ :type => :circle, :radius=>50, :offset=>CP::Vec2.new(0, 0) })
+			MapElement.create(:space=>self.space,:image=>$imageManager.ids(:WOOD_CIRCLE_4X4).image, :x=>150, :y=>10, :body=>{ :weight=>10, :moment=>10000}, :shapes=>{ :type => :circle, :radius=>35, :offset=>CP::Vec2.new(0, 0), :friction=>1 })
+			MapElement.create(:space=>self.space,:image=>$imageManager.ids(:WOOD_BLOCK_2X2).image, :angle=>320*rand(), :x=>350, :y=>10, :body=>{ :weight=>4, :moment=>10000}, :shapes=>{ :type => :rect, :width=>35, :height=>35, :friction=>1 })
 		end
 
 		def _setupConfig

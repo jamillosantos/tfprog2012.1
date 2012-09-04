@@ -1,9 +1,64 @@
 
+
+class Weapon
+	attr_accessor :power, :spread
+
+	def initialize (wmanager)
+		@weaponManager = (wmanager)
+		@char = wmanager.char
+	end
+
+	# Weapon destruciton power
+	def power
+		@power
+	end
+
+	def power=(value)
+		@power = value
+	end
+
+	# Weapon particle spread, in radians
+	def spread
+		@spread
+	end
+
+	def spread=(value)
+		@spread = value
+	end
+
+	# Delay between shoots
+	def delay
+		@delay
+	end
+
+	def delay=(value)
+		@delay = value
+	end
+
+	# Recharge delay
+	def rechargeTime
+		@rechargeTime
+	end
+
+	def rechargeTime=(value)
+		@rechargeTime = value
+	end
+
+	def shoot
+	end
+
+	def recharge
+	end
+
+	def recoil
+	end
+end
+
 class WeaponManager
 	# Angle velocity change
 	ANGLE_PER_MS = Math::PI/2000
 
-	attr_accessor :index, :current, :angle, :maxAngle
+	attr_accessor :index, :current, :angle, :maxAngle, :char
 
 	def initialize(char)
 		@angle = 0.0
@@ -12,6 +67,10 @@ class WeaponManager
 
 		@char = char
 		@weapons = []
+	end
+
+	def char
+		@char
 	end
 
 	def index
@@ -70,9 +129,9 @@ class WeaponManager
 	end
 
 	# Fire the shoot particle
-	def fire
+	def shoot
 		# Project
-		self.current.fire
+		@current.shoot
 		self
 	end
 
@@ -90,41 +149,4 @@ class WeaponManager
 		def _updateAngle
 			@angle = (@maxAngle*@idxAngle) - Math::PIH
 		end
-end
-
-class Weapon
-	attr_accessor :power, :spread
-
-	def power
-		@power
-	end
-
-	def power=(value)
-		@power = value
-	end
-
-	def spread
-		@spread
-	end
-
-	def spread=(value)
-		@spread = value
-	end
-
-	def delay
-		@delay
-	end
-
-	def delay=(value)
-		@delay = value
-	end
-
-	def fire
-	end
-
-	def recharge
-	end
-
-	def recoil
-	end
 end

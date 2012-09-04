@@ -18,7 +18,7 @@ class MainWindow < Chingu::Window
 		$imageManager.cache({:birds=>'config/INGAME_BIRDS.json'});
 		$imageManager.cache({:blocks=>'config/INGAME_BLOCKS_BASIC.json'});
 
-		#$imageManager[:blocks]
+		$imageManager[:blocks]
 
 		self.caption = 'Mad Birds'
 
