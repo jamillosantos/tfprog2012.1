@@ -5,7 +5,7 @@ require 'chipmunk'
 Kernel.r 'weapon/Weapon.rb'
 
 class Char < Chingu::GameObject
-	attr_accessor :weapons, :body, :shape, :strength
+	attr_accessor :weapons, :body, :shape, :strength, :turned
 
 	def initialize(options)
 		@config = $config['chars/' + options]
@@ -102,7 +102,6 @@ class Char < Chingu::GameObject
 	
 		def jump
 			puts 'Char::jump'
-			# self.body.v.y = -30
 			self.body.apply_impulse(@jumpImpulse, CP::Vec2.new(0, 0))
 			self
 		end
@@ -113,6 +112,10 @@ class Char < Chingu::GameObject
 	
 		def turnRight
 			@turned = 1.0
+		end
+
+		def turned
+			@turned
 		end
 	
 		#
@@ -165,8 +168,6 @@ class Char < Chingu::GameObject
 
 			self.angle = @body.a.degrees
 			# puts self.angle
-
-			puts self.body().p.inspect, self.body().v.inspect, self.shape.surface_v, '--------'
 
 			# self.body().t = 1
 

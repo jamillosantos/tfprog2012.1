@@ -9,7 +9,7 @@ module Geasy
 		def initialize(options)
 			super(options)
 
-			@space = options[:space]
+			@space = options[:space] || self.parent.space
 
 			@setupOptions = options
 			self._setupConfig

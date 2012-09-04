@@ -5,24 +5,57 @@ require 'geasy'
 
 class Bullet < Geasy::CPObject
 
-	def initalize(options)
+	def initialize(options)
+		puts 'Bullet::initialize'
 		@weapon = options[:weapon]
+		options[:colisionType] = :Bullet
+		options[:x] = @weapon.weaponManager.char.x
+		options[:y] = @weapon.weaponManager.char.y
+
+		@lastV = CP::Vec2.new(0, 0)
+
 		super(options)
 	end
 
+	def char
+		@weapon.weaponManager.char
+	end
+
 	def _afterSetups
-		r = 30
-		self.body.apply_impulse(100, CP::Vec2.new(r*Math.cos(@weapon.weaponManager.angle), r*Math.sin(@weapon.weaponManager.angle)))
+		r = 100
+		self.body.a = (@weapon.weaponManager.angle + Math::PIH)*self.char.turned
+		self.body.apply_impulse(CP::Vec2.new(self.char.turned*r*Math.cos(@weapon.weaponManager.angle), r*Math.sin(@weapon.weaponManager.angle)), Geasy::VZERO)
+		super
+	end
+
+	def update
+		puts self.body.v.inspect, @lastV.inspect, '---'
+		@lastV.x, @lastV.y = self.body.v.x, self.body.v.y
+		self.body.a = Math.tan(self.body.v.x/self.body.v.y) unless self.body.v.y == 0 
 		super
 	end
 end
 
+class Missile < Bullet
+	def initialize(options)
+		options[:image] = File.join(GFX, 'bullets', 'missile.png')
+		options[:shape] = { :type => :rect, :width => 12, :height => 22, :offset => [6, 0] }
+		options[:body] = { :weight => 1, :moment => 10000 }
+		super(options)
+	end
+end
+
 class Weapon
+	attr_reader :weaponManager
 	attr_accessor :power, :spread
 
 	def initialize (wmanager)
-		@weaponManager = (wmanager)
+		@weaponManager = wmanager
 		@char = wmanager.char
+	end
+
+	def weaponManager
+		@weaponManager
 	end
 
 	# Weapon destruciton power
@@ -62,7 +95,7 @@ class Weapon
 	end
 
 	def shoot
-		#
+		Missile.create(:weapon => self)
 	end
 
 	def recharge
@@ -83,19 +116,24 @@ class WeaponManager
 		@angle = 0.0
 		@idxAngle = 0.0
 		@maxAngle = ((Math::PI/6)*5)
+		@index = -1
 
 		@char = char
-		@weapons = []
+		@weapons = [Weapon.new(self)]
+		self.next()
 	end
 
+	# Char which have this weapon manager
 	def char
 		@char
 	end
 
+	# Current weapon index
 	def index
 		@index
 	end
 
+	# Shot angle
 	def angle
 		@angle
 	end
@@ -110,6 +148,7 @@ class WeaponManager
 		self
 	end
 
+	# Start the angle rotation
 	def startChangeAngle
 		@startChangeAngle = Gosu::milliseconds()
 	end
@@ -128,26 +167,26 @@ class WeaponManager
 		self._updateAngle()
 	end
 
-	# Current weapon
+	# Current weapon object reference
 	def current
 		@current
 	end
 
-	# Next weapon
+	# Change to next weapon
 	def next
 		@index += 1
 		self._update
 		self
 	end
 
-	# Previous weapon
+	# Change to previous weapon
 	def prev
 		@index -= 1
 		self._update
 		self
 	end
 
-	# Fire the shoot particle
+	# Fire the particle shot
 	def shoot
 		# Project
 		@current.shoot

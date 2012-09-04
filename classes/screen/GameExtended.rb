@@ -42,7 +42,6 @@ class GameExtended < Game
 		@bird.input = {
 			:space => :shoot,
 			:x => :startJump,
-			:holding_p => :testando,
 			:released_x => :jump,
 			:left => :turnLeft,
 			:right => :turnRight,
