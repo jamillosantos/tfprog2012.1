@@ -7,6 +7,7 @@ require 'chipmunk'
 Kernel.r 'screen/Game.rb'
 Kernel.r 'chars/Bird.rb'
 Kernel.r 'collisions/Char.rb'
+Kernel.r 'collisions/Bullet.rb'
 Kernel.r 'maps/Map.rb'
 
 class GameExtended < Game
@@ -58,6 +59,11 @@ class GameExtended < Game
 		@floor = Map.create(:space=>self.space, :config=>'levels/level1');
 
 	    # self.space.add_collision_handler(:Char, :Floor, MadBirds::Collisions::Char.new)
+		bulletCollision = MadBirds::Collisions::Bullet.new
+	    self.space.add_collision_handler(:Bullet, :Floor, bulletCollision)
+	    self.space.add_collision_handler(:Bullet, :Char, bulletCollision)
+	    self.space.add_collision_handler(:Bullet, :Elements, bulletCollision)
+	    self.space.add_collision_handler(:Bullet, :Bullet, bulletCollision)
 	end
 
 	def update

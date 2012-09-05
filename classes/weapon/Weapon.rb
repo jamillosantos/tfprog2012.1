@@ -6,11 +6,11 @@ require 'geasy'
 class Bullet < Geasy::CPObject
 
 	def initialize(options)
-		puts 'Bullet::initialize'
 		@weapon = options[:weapon]
-		options[:colisionType] = :Bullet
-		options[:x] = @weapon.weaponManager.char.x
-		options[:y] = @weapon.weaponManager.char.y
+		options[:collisionType] = :Bullet
+		r = 30
+		options[:x] = @weapon.weaponManager.char.x + self.char.turned*r*Math.cos(@weapon.weaponManager.angle)
+		options[:y] = @weapon.weaponManager.char.y + r*Math.sin(@weapon.weaponManager.angle)
 
 		@lastV = CP::Vec2.new(0, 0)
 
@@ -24,23 +24,28 @@ class Bullet < Geasy::CPObject
 	def _afterSetups
 		r = 100
 		self.body.a = (@weapon.weaponManager.angle + Math::PIH)*self.char.turned
-		self.body.apply_impulse(CP::Vec2.new(self.char.turned*r*Math.cos(@weapon.weaponManager.angle), r*Math.sin(@weapon.weaponManager.angle)), Geasy::VZERO)
+		self.body.apply_impulse(CP::Vec2.new(self.char().body.v.x + self.char.turned*r*Math.cos(@weapon.weaponManager.angle), self.char().body.v.y + r*Math.sin(@weapon.weaponManager.angle)), Geasy::VZERO)
 		super
 	end
 
 	def update
-		puts self.body.v.inspect, @lastV.inspect, '---'
-		@lastV.x, @lastV.y = self.body.v.x, self.body.v.y
-		self.body.a = Math.tan(self.body.v.x/self.body.v.y) unless self.body.v.y == 0 
+		# Sync the bullet angle with the velocity, with angle correction
+		self.body.a = self.body.v.to_angle + Math::PIH
 		super
+	end
+
+	def explode
+		self.destroy
 	end
 end
 
 class Missile < Bullet
 	def initialize(options)
 		options[:image] = File.join(GFX, 'bullets', 'missile.png')
-		options[:shape] = { :type => :rect, :width => 12, :height => 22, :offset => [6, 0] }
-		options[:body] = { :weight => 1, :moment => 10000 }
+		options[:friction] = 1
+		options[:elasticity] = 0.3
+		options[:shapes] = { :type => :rect, :width => 12, :height => 22, :offset => [6, 0] }
+		options[:body] = { :weight => 1, :moment => 1000 }
 		super(options)
 	end
 end
