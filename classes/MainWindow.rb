@@ -13,7 +13,7 @@ class MainWindow < Chingu::Window
 		super(640, 480)
 
 		$imageManager = Geasy::ImageManager.new()
-
+		
 		self.caption = 'Mad Birds'
 
 		push_game_state(MainMenu)
