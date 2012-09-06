@@ -1,23 +1,144 @@
 
+require 'chingu'
+require 'chipmunk'
+require 'geasy'
+
+class Bullet < Geasy::CPObject
+
+	def initialize(options)
+		@weapon = options[:weapon]
+		options[:collisionType] = :Bullet
+		r = 30
+		options[:x] = @weapon.weaponManager.char.x + self.char.turned*r*Math.cos(@weapon.weaponManager.angle)
+		options[:y] = @weapon.weaponManager.char.y + r*Math.sin(@weapon.weaponManager.angle)
+
+		@lastV = CP::Vec2.new(0, 0)
+
+		super(options)
+	end
+
+	def char
+		@weapon.weaponManager.char
+	end
+
+	def _afterSetups
+		r = 100
+		self.body.a = (@weapon.weaponManager.angle + Math::PIH)*self.char.turned
+		self.body.apply_impulse(CP::Vec2.new(self.char().body.v.x + self.char.turned*r*Math.cos(@weapon.weaponManager.angle), self.char().body.v.y + r*Math.sin(@weapon.weaponManager.angle)), Geasy::VZERO)
+		super
+	end
+
+	def update
+		# Sync the bullet angle with the velocity, with angle correction
+		self.body.a = self.body.v.to_angle + Math::PIH
+		super
+	end
+
+	def explode
+		self.destroy
+	end
+end
+
+class Missile < Bullet
+	def initialize(options)
+		options[:image] = File.join(GFX, 'bullets', 'missile.png')
+		options[:friction] = 1
+		options[:elasticity] = 0.3
+		options[:shapes] = { :type => :rect, :width => 12, :height => 22, :offset => [6, 0] }
+		options[:body] = { :weight => 1, :moment => 1000 }
+		super(options)
+	end
+end
+
+class Weapon
+	attr_reader :weaponManager
+	attr_accessor :power, :spread
+
+	def initialize (wmanager)
+		@weaponManager = wmanager
+		@char = wmanager.char
+	end
+
+	def weaponManager
+		@weaponManager
+	end
+
+	# Weapon destruciton power
+	def power
+		@power
+	end
+
+	def power=(value)
+		@power = value
+	end
+
+	# Weapon particle spread, in radians
+	def spread
+		@spread
+	end
+
+	def spread=(value)
+		@spread = value
+	end
+
+	# Delay between shoots
+	def delay
+		@delay
+	end
+
+	def delay=(value)
+		@delay = value
+	end
+
+	# Recharge delay
+	def rechargeTime
+		@rechargeTime
+	end
+
+	def rechargeTime=(value)
+		@rechargeTime = value
+	end
+
+	def shoot
+		Missile.create(:weapon => self)
+	end
+
+	def recharge
+		#
+	end
+end
+
+class WeaponBlaster < Weapon
+end
+
 class WeaponManager
 	# Angle velocity change
 	ANGLE_PER_MS = Math::PI/2000
 
-	attr_accessor :index, :current, :angle, :maxAngle
+	attr_accessor :index, :current, :angle, :maxAngle, :char
 
 	def initialize(char)
 		@angle = 0.0
 		@idxAngle = 0.0
 		@maxAngle = ((Math::PI/6)*5)
+		@index = -1
 
 		@char = char
-		@weapons = []
+		@weapons = [Weapon.new(self)]
+		self.next()
 	end
 
+	# Char which have this weapon manager
+	def char
+		@char
+	end
+
+	# Current weapon index
 	def index
 		@index
 	end
 
+	# Shot angle
 	def angle
 		@angle
 	end
@@ -32,6 +153,7 @@ class WeaponManager
 		self
 	end
 
+	# Start the angle rotation
 	def startChangeAngle
 		@startChangeAngle = Gosu::milliseconds()
 	end
@@ -50,29 +172,29 @@ class WeaponManager
 		self._updateAngle()
 	end
 
-	# Current weapon
+	# Current weapon object reference
 	def current
 		@current
 	end
 
-	# Next weapon
+	# Change to next weapon
 	def next
 		@index += 1
 		self._update
 		self
 	end
 
-	# Previous weapon
+	# Change to previous weapon
 	def prev
 		@index -= 1
 		self._update
 		self
 	end
 
-	# Fire the shoot particle
-	def fire
+	# Fire the particle shot
+	def shoot
 		# Project
-		self.current.fire
+		@current.shoot
 		self
 	end
 
@@ -90,41 +212,4 @@ class WeaponManager
 		def _updateAngle
 			@angle = (@maxAngle*@idxAngle) - Math::PIH
 		end
-end
-
-class Weapon
-	attr_accessor :power, :spread
-
-	def power
-		@power
-	end
-
-	def power=(value)
-		@power = value
-	end
-
-	def spread
-		@spread
-	end
-
-	def spread=(value)
-		@spread = value
-	end
-
-	def delay
-		@delay
-	end
-
-	def delay=(value)
-		@delay = value
-	end
-
-	def fire
-	end
-
-	def recharge
-	end
-
-	def recoil
-	end
 end

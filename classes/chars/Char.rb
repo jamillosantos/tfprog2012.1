@@ -5,7 +5,7 @@ require 'chipmunk'
 Kernel.r 'weapon/Weapon.rb'
 
 class Char < Chingu::GameObject
-	attr_accessor :weapons, :body, :shape, :strength
+	attr_accessor :weapons, :body, :shape, :strength, :turned
 
 	def initialize(options)
 		@config = $config['chars/' + options]
@@ -15,14 +15,21 @@ class Char < Chingu::GameObject
 
 		super({})
 
+		unless @config[:center].nil?
+			self.center_x = @config[:center][:x] unless @config[:center][:x].nil?
+			self.center_y = @config[:center][:y] unless @config[:center][:y].nil?
+		end
+
 		self._setupBody
 
-		@maxVX = 50
+		self.body().v_limit = 70
+
+		@maxVX = 20
 
 		@strength = @config[:strength]
 
 		if !@config[:imagePrefix].nil?
-			@images = [$imageManager[:birds].sprites[@config[:imagePrefix]+'_1'].image, $imageManager[:birds].sprites[@config[:imagePrefix] + '_BLINK'].image]
+			@images = [$imageManager[:birds].sprites[(@config[:imagePrefix]+'_1').to_sym].image, $imageManager[:birds].sprites[(@config[:imagePrefix] + '_BLINK').to_sym].image]
 		end
 
 		self._setupShape()
@@ -41,10 +48,10 @@ class Char < Chingu::GameObject
 		def _setupBody
 			@body = self._initBody
 
-			self.body.p.x = 200
-			self.body.p.y = 0
-
-			self.body.v_limit = 50
+			self.body.p.x = 50 + $window.width*rand() - 100 
+			#self.body.p.y = 0
+			
+			#self.body.v_limit = 50
 			self.body.object = self
 			self.parent().space.add_body(self.body)
 		end
@@ -106,6 +113,10 @@ class Char < Chingu::GameObject
 		def turnRight
 			@turned = 1.0
 		end
+
+		def turned
+			@turned
+		end
 	
 		#
 		# Verifica se o personagem está no chão
@@ -125,30 +136,8 @@ class Char < Chingu::GameObject
 			end
 		end
 
-		def moveLeft
-			self.turnLeft
-			if (self.grounded?)
-				i = 3
-			else
-				i = 1
-			end
-			if (self.body.v.x > 0)
-				i *= 3
-			end
-			self.body.v.x = Math.max(self.body.v.x - i, -@maxVX)
-		end
-	
-		def moveRight
-			self.turnRight
-			if (self.grounded?)
-				i = 1
-			else
-				i = 0.3
-			end
-			if (self.body.v.x < 0)
-				i *= 3
-			end
-			self.body.v.x = Math.min(self.body.v.x + i, @maxVX)
+		def move
+			self.body.v.x = Math.min(Math.max(self.body.v.x + (2*@turned), -@maxVX), @maxVX)
 		end
 
 		def startChangeAngle
@@ -166,21 +155,43 @@ class Char < Chingu::GameObject
 		def update
 			super
 
-			# Synchronizes the body and Gosu properties
+			# Blink
 			self.image = @images[(((Gosu::milliseconds % 5100) > 5000)?1:0)]
 
+			# Velocity deformation
 			self.factor_y = 1 - (self.body.v.y/self.body.v_limit)*0.1
 			self.factor_x = @turned + (self.body.v.y/self.body.v_limit)*0.1*@turned
 
+			# Sync with Chipmunk
 			self.x = self.body.p.x
 			self.y = self.body.p.y
 
-			#$window.trans
+			self.angle = @body.a.degrees
+			# puts self.angle
 
+			# self.body().t = 1
+
+			# Crosshair
 			@crossHair.x = self.x + (@crossHairRadius*Math.cos(self.weapons.angle))*@turned
 			@crossHair.y = self.y + (@crossHairRadius*Math.sin(self.weapons.angle))
+		end
 
-			#### a.x = @passarovemelhor.x + a.xRelativo
-			
+		def draw
+			super
+			$window.gl {
+				glBegin(GL_LINE_LOOP); 
+					glVertex2f(self.x - self.parent().viewport.x, self.y - self.parent().viewport.y)
+					20.times do |ii|
+						theta = 2 * Math::PI * ii / 20.0
+						glVertex2f(self.x - self.parent().viewport.x + (17 * Math.cos(theta)), self.y - self.parent().viewport.y + 17 * Math.sin(theta)) 
+					end
+					theta = 2 * Math::PI * 0 / 20.0
+					glVertex2f(self.x - self.parent().viewport.x + (17 * Math.cos(theta)), self.y - self.parent().viewport.y + 17 * Math.sin(theta)) 
+					glEnd() 
+			}
+		end
+
+		def shoot
+			@weapons.shoot
 		end
 end

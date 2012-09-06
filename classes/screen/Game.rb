@@ -36,5 +36,6 @@ class Game < Chingu::GameState
 	protected
 		def _setupSpace
 			@space.gravity = CP::Vec2.new(0, 10)
+			@space.damping = 0.9
 		end
 end

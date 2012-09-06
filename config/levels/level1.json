@@ -1,11 +1,12 @@
 {
 	"body":
 	{
-		"mass":"INF",
-		"moment":"INF"
+		"mass":Infinity,
+		"moment":Infinity
 	},
-	"elasticity":0.4,
-	"friction":0.7,
+	"elasticity":0.3,
+	"friction":1,
+	"collisionType":"Floor",
 	"shapes": [
 		{
 			"type":"poly",
@@ -21,5 +22,49 @@
 			"elasticity":1.0
 		}
 	],
-	"bgColor":"0xFFCCAA"
+	"bgColor": "0",
+	"parallaxes": [
+		{
+			"x": 0,
+			"y": 0,
+			"z": 1,
+			"rotation_center": "top_left",
+			"layers": [
+				{
+					"image": "BLUE_GRASS_BG_1.png",
+					"damping": 50
+				}
+			]
+		},
+		{
+			"x": 0,
+			"y": 0,
+			"z": 1,
+			"layers": [
+				{
+					"image": "BLUE_GRASS_BG_1.png",
+					"damping": 50
+				}
+			]
+		},
+		{
+			"x": 0,
+			"y": 0,
+			"z": 1,
+			"image": "BLUE_GRASS_FG_2.png",
+			"repeat_x": true,
+			"repeat_y": false,
+			"damping": 1
+		},
+		{
+			"x": 0,
+			"y": 0,
+			"z": 1,
+			"image": "BLUE_GRASS_BG_3.png",
+			"repeat_x": true,
+			"repeat_y": false,
+			"damping": 1
+		}
+	],
+	"elements": "Level1-1"
 }
