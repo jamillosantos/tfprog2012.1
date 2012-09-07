@@ -7,36 +7,45 @@ class Bullet < Geasy::CPObject
 
 	def initialize(options)
 		@weapon = options[:weapon]
+
 		options[:collisionType] = :Bullet
 		r = 30
 		options[:x] = @weapon.weaponManager.char.x + self.char.turned*r*Math.cos(@weapon.weaponManager.angle)
 		options[:y] = @weapon.weaponManager.char.y + r*Math.sin(@weapon.weaponManager.angle)
 
-		@lastV = CP::Vec2.new(0, 0)
-
 		super(options)
 	end
 
-	def char
-		@weapon.weaponManager.char
-	end
+	protected
+	
+		def _afterSetups
+			r = 75
+			self.body.a = (@weapon.weaponManager.angle + Math::PIH)*self.char.turned
+			self.body.apply_impulse(CP::Vec2.new(self.char().body.v.x + self.char.turned*r*Math.cos(@weapon.weaponManager.angle), self.char().body.v.y + r*Math.sin(@weapon.weaponManager.angle)), Geasy::VZERO)
+			super
+		end
 
-	def _afterSetups
-		r = 100
-		self.body.a = (@weapon.weaponManager.angle + Math::PIH)*self.char.turned
-		self.body.apply_impulse(CP::Vec2.new(self.char().body.v.x + self.char.turned*r*Math.cos(@weapon.weaponManager.angle), self.char().body.v.y + r*Math.sin(@weapon.weaponManager.angle)), Geasy::VZERO)
-		super
-	end
+	public
 
-	def update
-		# Sync the bullet angle with the velocity, with angle correction
-		self.body.a = self.body.v.to_angle + Math::PIH
-		super
-	end
-
-	def explode
-		self.destroy
-	end
+		def char
+			@weapon.weaponManager.char
+		end
+	
+		def update
+			# Sync the bullet angle with the velocity, with angle correction
+			# self.body.a = self.body.v.to_angle + Math::PIH
+			super
+		end
+	
+		def explode
+			raio = 50
+			self.parent.game_objects.each do |object|
+				if (object.is_a? Geasy::CPObject) && (object.body.p.near?(self.body.p, raio))
+					object.body.apply_impulse((object.body.p-self.body.p)*@weapon.power, Geasy::VZERO)
+				end
+			end
+			self.destroy
+		end
 end
 
 class Missile < Bullet
@@ -54,58 +63,65 @@ class Weapon
 	attr_reader :weaponManager
 	attr_accessor :power, :spread
 
-	def initialize (wmanager)
-		@weaponManager = wmanager
-		@char = wmanager.char
+	def initialize (options = {})
+		@weaponManager = options[:weaponManager]
+		@char = @weaponManager.char
+
+		self.power = options[:power] unless options[:power].nil?
+		self.spread = options[:spread] unless options[:spread].nil?
+		self.delay = options[:delay] unless options[:delay].nil?
+		self.rechargeTime = options[:rechargeTime] unless options[:rechargeTime].nil?
 	end
 
-	def weaponManager
-		@weaponManager
-	end
+	public
 
-	# Weapon destruciton power
-	def power
-		@power
-	end
-
-	def power=(value)
-		@power = value
-	end
-
-	# Weapon particle spread, in radians
-	def spread
-		@spread
-	end
-
-	def spread=(value)
-		@spread = value
-	end
-
-	# Delay between shoots
-	def delay
-		@delay
-	end
-
-	def delay=(value)
-		@delay = value
-	end
-
-	# Recharge delay
-	def rechargeTime
-		@rechargeTime
-	end
-
-	def rechargeTime=(value)
-		@rechargeTime = value
-	end
-
-	def shoot
-		Missile.create(:weapon => self)
-	end
-
-	def recharge
-		#
-	end
+		def weaponManager
+			@weaponManager
+		end
+	
+		# Weapon destruciton power
+		def power
+			@power
+		end
+	
+		def power=(value)
+			@power = value
+		end
+	
+		# Weapon particle spread, in radians
+		def spread
+			@spread
+		end
+	
+		def spread=(value)
+			@spread = value
+		end
+	
+		# Delay between shoots
+		def delay
+			@delay
+		end
+	
+		def delay=(value)
+			@delay = value
+		end
+	
+		# Recharge delay
+		def rechargeTime
+			@rechargeTime
+		end
+	
+		def rechargeTime=(value)
+			@rechargeTime = value
+		end
+	
+		def shoot
+			Missile.create(:weapon => self)
+		end
+	
+		def recharge
+			#
+		end
 end
 
 class WeaponBlaster < Weapon
@@ -124,7 +140,7 @@ class WeaponManager
 		@index = -1
 
 		@char = char
-		@weapons = [Weapon.new(self)]
+		@weapons = [Weapon.new({ :weaponManager=>self, :power=>3 })]
 		self.next()
 	end
 

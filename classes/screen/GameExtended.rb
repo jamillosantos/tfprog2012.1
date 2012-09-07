@@ -60,10 +60,10 @@ class GameExtended < Game
 
 	    # self.space.add_collision_handler(:Char, :Floor, MadBirds::Collisions::Char.new)
 		bulletCollision = MadBirds::Collisions::Bullet.new
-	    self.space.add_collision_handler(:Bullet, :Floor, bulletCollision)
-	    self.space.add_collision_handler(:Bullet, :Char, bulletCollision)
-	    self.space.add_collision_handler(:Bullet, :Elements, bulletCollision)
-	    self.space.add_collision_handler(:Bullet, :Bullet, bulletCollision)
+#	    self.space.add_collision_handler(:Bullet, :Floor, bulletCollision)
+#	    self.space.add_collision_handler(:Bullet, :Char, bulletCollision)
+#	    self.space.add_collision_handler(:Bullet, :Elements, bulletCollision)
+#	    self.space.add_collision_handler(:Bullet, :Bullet, bulletCollision)
 	end
 
 	def update

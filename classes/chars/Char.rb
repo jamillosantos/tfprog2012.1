@@ -180,14 +180,14 @@ class Char < Chingu::GameObject
 			super
 			$window.gl {
 				glBegin(GL_LINE_LOOP); 
-					glVertex2f(self.x - self.parent().viewport.x, self.y - self.parent().viewport.y)
-					20.times do |ii|
-						theta = 2 * Math::PI * ii / 20.0
-						glVertex2f(self.x - self.parent().viewport.x + (17 * Math.cos(theta)), self.y - self.parent().viewport.y + 17 * Math.sin(theta)) 
-					end
-					theta = 2 * Math::PI * 0 / 20.0
+				glVertex2f(self.x - self.parent().viewport.x, self.y - self.parent().viewport.y)
+				20.times do |ii|
+					theta = 2 * Math::PI * ii / 20.0
 					glVertex2f(self.x - self.parent().viewport.x + (17 * Math.cos(theta)), self.y - self.parent().viewport.y + 17 * Math.sin(theta)) 
-					glEnd() 
+				end
+				theta = 2 * Math::PI * 0 / 20.0
+				glVertex2f(self.x - self.parent().viewport.x + (17 * Math.cos(theta)), self.y - self.parent().viewport.y + 17 * Math.sin(theta)) 
+				glEnd() 
 			}
 		end
 
