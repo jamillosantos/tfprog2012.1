@@ -1,5 +1,6 @@
 
 Kernel.r 'chars/Char.rb'
-
-class Bird < Char
+module MadBirds
+	class Bird < Char
+	end
 end

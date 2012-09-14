@@ -37,9 +37,9 @@ class GameExtended < Game
 		tmp << {:image => GFX+File::SEPARATOR+"BLUE_GRASS_BG_3.png", :y=>0, :damping => 1, :center => 0}
 		@parallaxes << tmp
 
-		@bird2 = Bird.create('redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
+		@bird2 = MadBirds::Bird.create('redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
 
-		@bird = Bird.create('redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
+		@bird = MadBirds::Bird.create('redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
 		@bird.input = {
 			:space => :shoot,
 			:x => :startJump,
@@ -60,10 +60,10 @@ class GameExtended < Game
 
 	    # self.space.add_collision_handler(:Char, :Floor, MadBirds::Collisions::Char.new)
 		bulletCollision = MadBirds::Collisions::Bullet.new
-#	    self.space.add_collision_handler(:Bullet, :Floor, bulletCollision)
-#	    self.space.add_collision_handler(:Bullet, :Char, bulletCollision)
-#	    self.space.add_collision_handler(:Bullet, :Elements, bulletCollision)
-#	    self.space.add_collision_handler(:Bullet, :Bullet, bulletCollision)
+	    self.space.add_collision_handler(:Bullet, :Floor, bulletCollision)
+	    self.space.add_collision_handler(:Bullet, :Char, bulletCollision)
+	    self.space.add_collision_handler(:Bullet, :Elements, bulletCollision)
+	    self.space.add_collision_handler(:Bullet, :Bullet, bulletCollision)
 	end
 
 	def update

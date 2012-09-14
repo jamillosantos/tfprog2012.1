@@ -17,8 +17,9 @@
 		"stand":[""],
 		"hurt": [""]
 	},
-	"shape": {
-		"id": "BIRD_CIRCLE_RED",
+	"shapes": {
+		"type": "circle",
+		"radius": 17.0,
 		"elasticity": 0.7,
 		"friction": 0.5,
 		"collision": "Char",
