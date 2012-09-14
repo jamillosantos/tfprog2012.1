@@ -4,6 +4,7 @@ require 'chipmunk'
 require 'geasy'
 
 Kernel.r 'base/Object.rb'
+Kernel.r 'animation/Explosion.rb'
 
 module MadBirds
 	module Base
@@ -50,19 +51,24 @@ module MadBirds
 					@destroying
 				end
 			
-				def explode
+				def explode(point = nil)
 					r = 50
-					@destroying = true
-					self.parent.game_objects.each do |object|
-						if (object.is_a? MadBirds::Base::Object) && (object.body.p.near?(self.body.p, r))
-							if (object.is_a? Bullet)
-								object.explode unless object.destroying?
-							else
-								object.body.apply_impulse((object.body.p-self.body.p)*@weapon.power*3*object.body.m, Geasy::VZERO)
+					unless @destroying
+						point = CP::Vec2.new(self.x, self.y) unless point
+
+						MadBirds::Animation::Explosion.create(:x => point.x, :y => point.y)
+						@destroying = true
+						self.parent.game_objects.each do |object|
+							if (object.is_a? MadBirds::Base::Object) && (object.body.p.near?(self.body.p, r))
+								if (object.is_a? Bullet)
+									object.explode unless object.destroying?
+								else
+									object.body.apply_impulse((object.body.p-self.body.p)*@weapon.power*3, Geasy::VZERO)
+								end
 							end
 						end
+						self.destroy
 					end
-					self.destroy
 				end
 		end
 		
@@ -179,7 +185,7 @@ module MadBirds
 				@index = -1
 		
 				@char = char
-				@weapons = [Weapon.new({ :weaponManager=>self, :amount => 3, :power=>3, :recoil => 30 })]
+				@weapons = [Weapon.new({ :weaponManager=>self, :amount => 1, :power=>3, :recoil => 30 })]
 				self.next()
 			end
 		

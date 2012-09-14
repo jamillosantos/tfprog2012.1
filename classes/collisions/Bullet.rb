@@ -6,7 +6,7 @@ module MadBirds
 				if (b.object.is_a? MadBirds::Base::Bullet)
 					false
 				else
-					a.object.explode if arbiter.first_contact?
+					a.object.explode(arbiter.points.first.point) if arbiter.first_contact?
 					true
 				end
 			end
