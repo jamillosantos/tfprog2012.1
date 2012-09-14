@@ -1,6 +1,6 @@
 {
 	"strength": 1,
-	"life": 1,
+	"life": 100,
 	"defense": 0.1,
 	"material": "RED_BIRD",
 	"imagePrefix": "BIRD_RED",

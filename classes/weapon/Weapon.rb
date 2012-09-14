@@ -22,7 +22,9 @@ module MadBirds
 				r = 30
 				options[:x] = @weapon.weaponManager.char.x + self.char.turned*r*Math.cos(options[:angle] || @weapon.weaponManager.angle)
 				options[:y] = @weapon.weaponManager.char.y + r*Math.sin(options[:angle] || @weapon.weaponManager.angle)
-		
+
+				self.damage = options[:damage] || 10
+
 				super(options)
 			end
 		
@@ -39,6 +41,15 @@ module MadBirds
 		
 				def char
 					@weapon.weaponManager.char
+				end
+
+				# Dano máximo da `Bullet`
+				def damage
+					@damage
+				end
+
+				def damage=(value)
+					@damage = value
 				end
 			
 				def update
@@ -63,6 +74,7 @@ module MadBirds
 								if (object.is_a? Bullet)
 									object.explode unless object.destroying?
 								else
+									object.damage(self.damage * (object.body.p.dist(self.body.p)/r)) if object.is_a? MadBirds::Base::LifeObject
 									object.body.apply_impulse((object.body.p-self.body.p)*@weapon.power*3, Geasy::VZERO)
 								end
 							end
@@ -86,7 +98,7 @@ module MadBirds
 		class Weapon
 			attr_reader :weaponManager, :char
 			attr_accessor :amount, :power, :spread, :delay, :recoil, :rechargeTime
-		
+
 			def initialize (options = {})
 				@weaponManager = options[:weaponManager]
 				@char = @weaponManager.char
@@ -117,7 +129,7 @@ module MadBirds
 				def amount=(value)
 					@amount = value
 				end
-			
+
 				# Weapon destruciton power
 				def power
 					@power
@@ -126,7 +138,7 @@ module MadBirds
 				def power=(value)
 					@power = value
 				end
-		
+
 				# Weapon particle spread, in radians
 				def spread
 					@spread

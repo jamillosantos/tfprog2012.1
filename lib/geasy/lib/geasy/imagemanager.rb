@@ -2,8 +2,6 @@ module Geasy
 	# Classe ajudante que facilita na manipulação de imagens.
 	# Author: J. Santos
 	class ImageManager
-		attr_reader :ids
-
 		def [](value)
 			if (@sprites[value] == nil) && ((tmp = @cache[value]) != nil)
 				fromFile(value, @cache[value])
@@ -32,8 +30,11 @@ module Geasy
 		# Coloca a configuração em cache para quando for utilizada fazer,
 		# automaticamente, o carregamento.
 		def cache(options)
+#			options.each do |name, file|
+#				@cache[name] = file
+#			end
 			options.each do |name, file|
-				@cache[name] = file
+				self.fromFile(name, file)
 			end
 			self
 		end

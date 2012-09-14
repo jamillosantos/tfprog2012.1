@@ -5,16 +5,19 @@ require 'chipmunk'
 require 'geasy'
 
 Kernel.r 'base/Object.rb'
+Kernel.r 'base/LifeObject.rb'
 Kernel.r 'weapon/Weapon.rb'
 
 module MadBirds
 	class Char < Base::Object
 		attr_accessor :weapons, :body, :shape, :strength, :turned
 
+		include Base::LifeObject
+
 		def initialize(options)
 			@weapons = Base::WeaponManager.new(self)
 			@turned = 1
-	
+
 			super($config['chars/' + options].merge({ :collisionType => :Char }))
 		end
 	
@@ -27,13 +30,22 @@ module MadBirds
 					self.center_x = @setupOptions[:center][:x] unless @setupOptions[:center][:x].nil?
 					self.center_y = @setupOptions[:center][:y] unless @setupOptions[:center][:y].nil?
 				end
+
+				self.life = @setupOptions[:life] || 100
+
+				@setupOptions[:state] = {} if @setupOptions[:state].nil?
 		
 				@maxVX = 20
 	
 				@strength = @setupOptions[:strength]
 	
 				if !@setupOptions[:imagePrefix].nil?
-					@images = [$imageManager[:birds].sprites[(@setupOptions[:imagePrefix]+'_1').to_sym].image, $imageManager[:birds].sprites[(@setupOptions[:imagePrefix] + '_BLINK').to_sym].image]
+					@images = {
+						:default=>$imageManager.ids(@setupOptions[:state][:default] || (@setupOptions[:imagePrefix]+'_1').to_sym).image,
+						:blink=>$imageManager.ids(@setupOptions[:state][:blink] || (@setupOptions[:imagePrefix] + '_BLINK').to_sym).image,
+						:injuried=>$imageManager.ids(@setupOptions[:state][:injuried] || (@setupOptions[:imagePrefix] + '_2').to_sym).image,
+						:died=>$imageManager.ids(@setupOptions[:state][:died] || (@setupOptions[:imagePrefix] + '_1').to_sym).image,
+					}
 				end
 				@jumpImpulse = CP::Vec2.new(0, -100*self.strength)
 		
@@ -44,7 +56,7 @@ module MadBirds
 				super()
 				self.body().v_limit = 70
 			end
-	
+
 			def _setupCrossHair
 				@crossHair = Chingu::GameObject.create(:image => Gosu::Image.new($window, 'gfx/crosshair.png'), :center_x => 0.5, :center_y => 0.5)
 				@crossHairRadius = @setupOptions[:crosshair][:radius]
@@ -112,7 +124,12 @@ module MadBirds
 				super
 	
 				# Blink
-				self.image = @images[(((Gosu::milliseconds % 5100) > 5000)?1:0)]
+				count = (Gosu::milliseconds % 5100)
+				if count < 5000
+					self.image = @images[(self.injuried? ? :injuried : :default)]
+				else
+					self.image = @images[:blink]
+				end
 	
 				# Velocity deformation
 				self.factor_y = 1 - (self.body.v.y/self.body.v_limit)*0.1
@@ -146,7 +163,13 @@ module MadBirds
 #					glEnd() 
 #				}
 #			end
-	
+
+			def die!
+				super
+				puts 'Safado morreu!!!!'
+				self.fullHealth
+			end
+
 			def shoot
 				@weapons.shoot
 			end
