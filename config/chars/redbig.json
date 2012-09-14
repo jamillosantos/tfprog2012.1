@@ -1,16 +1,16 @@
 {
-	"strength": 3,
+	"strength": 2,
 	"life": 1,
 	"defense": 0.1,
 	"material": "RED_BIRD",
-	"imagePrefix": "BIRD_RED",
+	"imagePrefix": "BIRD_REDBIG",
 	"center":
 	{
-		"x": 0.6,
-		"y": 0.6
+		"x": 0.60,
+		"y": 0.57
 	},
 	"body": {
-		"weight": 2.5
+		"weight": 6
 	},
 	"sprites":
 	{
@@ -19,7 +19,7 @@
 	},
 	"shapes": {
 		"type": "circle",
-		"radius": 17.0,
+		"radius": 41.0,
 		"elasticity": 0.7,
 		"friction": 0.5,
 		"collision": "Char",
@@ -30,7 +30,7 @@
 	},
 	"crosshair":
 	{
-		"radius": 50
+		"radius": 70
 	},
 	"collision":
 	{
