@@ -111,7 +111,7 @@ module MadBirds
 
 		class Weapon
 			attr_reader :weaponManager, :char
-			attr_accessor :amount, :power, :spread, :delay, :recoil, :rechargeTime
+			attr_accessor :amount, :power, :delay, :recoil, :rechargeTime
 
 			def initialize (options = {})
 				@weaponManager = options[:weaponManager]
@@ -119,7 +119,6 @@ module MadBirds
 		
 				self.amount = options[:amount] || 1
 				self.power = options[:power] || 1
-				self.spread = options[:spread] || 0
 				self.delay = options[:delay] || 0
 				self.recoil = options[:recoil] || 0
 				self.rechargeTime = options[:rechargeTime] || 1
@@ -153,15 +152,6 @@ module MadBirds
 					@power = value
 				end
 
-				# Weapon particle spread, in radians
-				def spread
-					@spread
-				end
-			
-				def spread=(value)
-					@spread = value
-				end
-			
 				# Delay between shoots
 				def delay
 					@delay
@@ -181,11 +171,6 @@ module MadBirds
 				end
 		
 				def shoot
-					angle = self.weaponManager.angle
-					self.amount.times do |a|
-						Missile.create(:weapon => self, :angle => angle)
-					end
-		
 					r = -self.recoil;
 					self.char.body.apply_impulse(CP::Vec2.new(self.char.turned*r*Math.cos(self.weaponManager.angle), r*Math.sin(self.weaponManager.angle)), Geasy::VZERO)
 				end
@@ -211,7 +196,7 @@ module MadBirds
 				@index = -1
 		
 				@char = char
-				@weapons = [Weapon.new({ :weaponManager=>self, :amount => 1, :power=>3, :recoil => 30 })]
+				@weapons = [Weapon.new({ :weaponManager=>self, :amount => 10, :power=>3, :recoil => 30 })]
 				self.next()
 			end
 		
