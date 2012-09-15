@@ -5,6 +5,7 @@ require 'geasy'
 
 Kernel.r 'base/Object.rb'
 Kernel.r 'animation/Explosion.rb'
+Kernel.r 'particles/Smoke.rb'
 
 module MadBirds
 	module Base
@@ -99,29 +100,11 @@ module MadBirds
 				super
 
 				if ((Gosu::milliseconds - (@lastParticle || 0)) > 100)
-				@particles << {
-					:time=>@lastParticle = Gosu::milliseconds,
-					:particle=>Chingu::Particle.create(
+					@lastParticle = Gosu::milliseconds
+					MadBirds::Particles::Smoke.create({
 						:x => self.x,
-						:y => self.y,
-						:image => File.join(GFX, 'smoke1.png'),
-						:width => 30,
-						:height => 30,
-						:scale_rate => +0.01,
-						:fade_rate => -10,
-						:rotation_rate => +1,
-						:mode => :default
-					)
-				}
-				end
-				@particles.each do |particle|
-					puts particle.inspect
-					if particle[:particle].alpha == 0
-						particle[:particle].destroy
-						@particles.delete(particle)
-					else
-						particle[:particle].y -= 1
-					end
+						:y => self.y
+					})
 				end
 			end
 		end
