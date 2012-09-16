@@ -109,13 +109,59 @@ module MadBirds
 			end
 		end
 
+		class Cartridge
+			attr_accessor :amount, :length
+
+			def initialize(options)
+				self.length = options[:length] || 1
+				self.proportion = options[:proportion] || 1
+				self.amount = options[:amount] || 1
+			end
+
+			public
+
+				def proportion
+					@proportion
+				end
+
+				def proportion=(value)
+					@proportion = value
+				end
+
+				def amount
+					@amount
+				end
+
+				def amount=(value)
+					@amount = Math.min(value, self.length)
+				end
+
+				def length
+					@length
+				end
+
+				def length=(value)
+					@length = value
+				end
+
+				def recharge()
+					self.amount = self.length
+				end
+
+				def rechargeStep()
+					self.amount += 1
+				end
+		end
+
 		class Weapon
-			attr_reader :weaponManager, :char
-			attr_accessor :amount, :power, :delay, :recoil, :rechargeTime
+			attr_reader :weaponManager, :char, :cartridge
+			attr_accessor :amount, :power, :delay, :recoil, :rechargeTime, :cartridge
 
 			def initialize (options = {})
 				@weaponManager = options[:weaponManager]
 				@char = @weaponManager.char
+
+				@cartridge = Cartridge.new({})
 		
 				self.amount = options[:amount] || 1
 				self.power = options[:power] || 1
@@ -123,15 +169,23 @@ module MadBirds
 				self.recoil = options[:recoil] || 0
 				self.rechargeTime = options[:rechargeTime] || 1
 			end
+
+			protected
+				def shootBullet
+				end
 		
 			public
-		
+
 				def weaponManager
 					@weaponManager
 				end
-		
+
 				def char
 					@weaponManager.char
+				end
+		
+				def cartridge
+					@cartridge
 				end
 		
 				# Bullets fired every shot
@@ -165,22 +219,43 @@ module MadBirds
 				def rechargeTime
 					@rechargeTime
 				end
-			
+
 				def rechargeTime=(value)
 					@rechargeTime = value
 				end
-		
+
+				# Shoot the particle
 				def shoot
-					r = -self.recoil;
-					self.char.body.apply_impulse(CP::Vec2.new(self.char.turned*r*Math.cos(self.weaponManager.angle), r*Math.sin(self.weaponManager.angle)), Geasy::VZERO)
+					if ((Gosu::milliseconds-(@shootTime || 0)) > @rechargeTime)
+						@shootTime = Gosu::milliseconds
+						self.shootBullet
+	
+						# Apply recoil
+						r = -self.recoil;
+						self.char.body.apply_impulse(CP::Vec2.new(self.char.turned*r*Math.cos(self.weaponManager.angle), r*Math.sin(self.weaponManager.angle)), Geasy::VZERO)
+					end
 				end
-			
-				def recharge
+
+				def startRecharge
+					@recharge_start = Gosu::milliseconds
+				end
+
+				def rechargeCheck
+					if ((Gosu::milliseconds - @recharge_start) >= @rechargeTime)
+						self.rechargeBack()
+					end
+				end
+
+				def stopRecharge
 					#
 				end
 		end
-		
-		class WeaponBlaster < Weapon
+
+		class Bazooka < Weapon
+			protected
+				def shootBullet
+					Missile.create(:weapon => self, :angle => @weaponManager.angle)
+				end
 		end
 		
 		class WeaponManager
@@ -196,7 +271,7 @@ module MadBirds
 				@index = -1
 		
 				@char = char
-				@weapons = [Weapon.new({ :weaponManager=>self, :amount => 10, :power=>3, :recoil => 30 })]
+				@weapons = [Bazooka.new({ :weaponManager=>self, :amount => 1, :power=>3, :recoil => 30, :rechargeTime => 1000 })]
 				self.next()
 			end
 		
