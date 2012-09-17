@@ -1,3 +1,6 @@
 [submodule "lib/chingu"]
 	path = lib/chingu
 	url = git@github.com:jamillosantos/chingu.git
+[submodule "lib/require_all"]
+	path = lib/require_all
+	url = git://github.com/jarmo/require_all.git
