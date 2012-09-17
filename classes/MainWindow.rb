@@ -1,24 +1,14 @@
 
-Kernel.r 'screen/Game.rb'
-Kernel.r 'screen/MainMenu.rb'
-
 # Janela principal do sistema.
 class MainWindow < Chingu::Window
 
 	def initialize
 		super(640, 480)
-
-		$imageManager = Geasy::ImageManager.new()
-
-		$imageManager.cache({:menuGeneral=>'config/INGAME_MENU_GENERAL.json'});
-		$imageManager.cache({:birds=>'config/INGAME_BIRDS.json'});
-		$imageManager.cache({:birdsSoul=>'config/INGAME_BIRDS_SOUL.json'});
-		$imageManager.cache({:pigs=>'config/INGAME_PIGS.json'});
-		$imageManager.cache({:blocks=>'config/INGAME_BLOCKS_BASIC.json'});
-
 		self.caption = 'Mad Birds'
 
-		push_game_state(GameExtended)
+		push_game_state(MadBirds::GameStates::Loading)
+
+		$imageManager = Geasy::ImageManager.new()
 
 		self.input = {
 			:escape => :exit

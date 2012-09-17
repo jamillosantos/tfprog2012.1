@@ -51,6 +51,34 @@ module MadBirds
 		class Map < BaseMap
 			def initialize(options)
 				super($config[options[:config]].merge(options))
+
+				@parallaxes = []
+
+				tmp = Chingu::Parallax.create(:x => 0, :y => 0, :rotation_center => :top_left, :zorder => 1)
+				tmp.add_layer(:image => File.join(GFX, 'BLUE_GRASS_BG_1.png'), :damping => 200, :center => 0)
+				@parallaxes << tmp
+		
+				tmp = Chingu::Parallax.create(:x => 0, :y => 813, :rotation_center => :top_left, :zorder => 10)
+				tmp << {:image => File.join(GFX, 'BLUE_GRASS_FG_1.png'), :y=>0, :damping => 1, :center => 0}
+				@parallaxes << tmp
+		
+				tmp = Chingu::Parallax.create(:x => 0, :y => tmp.y-30, :rotation_center => :top_left, :zorder => 10)
+				tmp << {:image => File.join(GFX, 'BLUE_GRASS_FG_2.png'), :y=>0, :damping => 1, :center => 0}
+				@parallaxes << tmp
+		
+				tmp = Chingu::Parallax.create(:x => 0, :y => tmp.y-30, :rotation_center => :top_left, :zorder => 2)
+				tmp << {:image => File.join(GFX, 'BLUE_GRASS_BG_3.png'), :y=>0, :damping => 1, :center => 0}
+				@parallaxes << tmp
+			end
+
+			def update
+				# Update parallaxes
+				@parallaxes.each do |parallax|
+					parallax.camera_x = @parent.viewport.x
+					parallax.camera_y = @parent.viewport.y
+				end
+
+				super
 			end
 		end
 	end
