@@ -13,6 +13,8 @@ module MadBirds
 				self.viewport.lag = 0
 				self.viewport.game_area = [0.0, 0.0, 1000.0, 1000.0]
 
+				@server = MadBirds::Network::Server.create(:game=>self)
+
 				# Game rules definition
 				@rules = { # Defaults
 					:rebirthDelay => 3000,
