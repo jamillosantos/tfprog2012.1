@@ -142,6 +142,7 @@ module MadBirds
 
 			def length=(value)
 				@length = value
+				@amount = value if @amount.nil?
 			end
 
 			def reload()
@@ -155,18 +156,19 @@ module MadBirds
 
 		class Weapon
 			attr_reader :weaponManager, :char, :cartridge
-			attr_accessor :amount, :power, :delay, :recoil, :reloadTime, :cartridge
+			attr_accessor :amount, :power, :delay, :recoil, :reloadDelay, :cartridge
 			def initialize (options = {})
 				@weaponManager = options[:weaponManager]
 				@char = @weaponManager.char
 
-				@cartridge = Cartridge.new({})
+				@cartridge = Cartridge.new(options[:cartridge] || {})
 
 				self.amount = options[:amount] || 1
 				self.power = options[:power] || 1
 				self.delay = options[:delay] || 0
 				self.recoil = options[:recoil] || 0
-				self.reloadTime = options[:reloadTime] || 1
+				self.shootDelay = options[:shootDelay] || 300
+				self.reloadDelay = options[:reloadDelay] || 1
 			end
 
 			protected
@@ -216,18 +218,35 @@ module MadBirds
 			end
 
 			# Reload delay
-			def reloadTime
-				@reloadTime
+			def reloadDelay
+				@reloadDelay
 			end
 
-			def reloadTime=(value)
-				@reloadTime = value
+			def reloadDelay=(value)
+				@reloadDelay = value
+			end
+
+			def shootDelay
+				@shootDelay
+			end
+
+			def shootDelay=(value)
+				@shootDelay = value
+			end
+
+			def update
+				if (@cartridge.amount == 0)
+					if ((Gosu::milliseconds-(@reloadTime || 0)) > @reloadDelay)
+						@cartridge.reload()
+						@reloadTime = Gosu::milliseconds
+					end
+				end
 			end
 
 			# Shoot the particle
 			def shoot
-				if (((Gosu::milliseconds-(@shootTime || 0)) > @reloadTime) && (@cartridge.amount > 0))
-					@shootTime = Gosu::milliseconds
+				if (((Gosu::milliseconds-(@shootTime || 0)) > @shootDelay) && (@cartridge.amount > 0))
+					@reloadTime = @shootTime = Gosu::milliseconds
 					self.shootBullet
 					@cartridge.amount -= 1
 
@@ -242,7 +261,7 @@ module MadBirds
 			end
 
 			def checkReload
-				if ((Gosu::milliseconds - @reload_start) >= @reloadTime)
+				if ((Gosu::milliseconds - @reload_start) >= @reloadDelay)
 					@cartridge.reloadStep
 				end
 			end
@@ -270,7 +289,7 @@ module MadBirds
 				@index = -1
 
 				@char = char
-				@weapons = [Bazooka.new({ :weaponManager=>self, :amount => 1, :power=>3, :recoil => 30, :reloadTime => 100 })]
+				@weapons = [Bazooka.new({ :weaponManager=>self, :cartridge => { :length => 3 }, :power=>3, :recoil => 30, @shootDelay => 300, :reloadDelay => 1000 })]
 				self.next()
 			end
 
@@ -361,18 +380,9 @@ module MadBirds
 				self
 			end
 
-			def startReload
-				@current.startReload
+			def update
+				@current.update unless @current.nil?
 			end
-
-			def checkReload
-				@current.checkReload
-			end
-
-			def stopReload
-				@current.stopReload
-			end
-
 		end
 	end
 end

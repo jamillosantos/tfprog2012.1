@@ -160,6 +160,8 @@ module MadBirds
 					self.destroy
 				else
 					super
+
+					@weapons.update
 		
 					unless self.died?
 						# Blink
@@ -208,7 +210,7 @@ module MadBirds
 				self.image = @images[:died]
 				self.fade_rate = -1
 				self.body.m = 1
-				@crossHair.destroy
+				@crossHair.destroy unless @crossHair.nil?
 				@crossHair = nil
 				self.removeShapes
 				self.body.apply_force(CP::Vec2.new(0, -10.5), Geasy::VZERO)
@@ -224,18 +226,6 @@ module MadBirds
 
 			def shoot
 				@weapons.shoot
-			end
-
-			def startReload
-				@weapons.startReload
-			end
-
-			def checkReload
-				@weapons.checkReload
-			end
-
-			def stopReload
-				@weapons.stopReload
 			end
 	end
 end

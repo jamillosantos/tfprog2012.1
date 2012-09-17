@@ -3,6 +3,15 @@ module MadBirds
 		module Elements
 			class Wood < BaseElement
 				def initialize(options)
+					puts options.deep_merge({
+						:body => {
+							:moment=>10000
+						},
+						:shapes=>{
+							:type => :rect,
+							:friction=>1
+						}
+					}).inspect
 					super(options.merge({
 						:body => {
 							:moment=>10000
@@ -19,8 +28,10 @@ module MadBirds
 				def initialize(options)
 					super(options.merge({
 						:image => $imageManager.ids(:WOOD_BLOCK_2X2).image,
-						:width => 35,
-						:height => 35
+						:shapes => {
+							:width => 35,
+							:height => 35
+						}
 					}))
 				end
 			end

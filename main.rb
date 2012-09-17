@@ -12,7 +12,10 @@ GFX = File.dirname(__FILE__) + File::SEPARATOR + 'gfx'
 
 require 'gosu'
 require 'chingu'
+require 'deep_merge'
 require 'geasy'
+
+require 'socket'
 
 require File.join(File.dirname(__FILE__), 'lib', 'require_all', 'lib', 'require_all.rb')
 

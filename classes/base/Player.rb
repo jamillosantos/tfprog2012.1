@@ -74,10 +74,7 @@ module MadBirds
 					:up => :startChangeAngle,
 					:down => :startChangeAngle,
 					:holding_up => :incAngle,
-					:holding_down => :decAngle,
-					:c => :startReload,
-					:holding_c => :checkReload,
-					:released_c => :stopReload,
+					:holding_down => :decAngle
 				}
 			end
 		end
