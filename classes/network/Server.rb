@@ -3,48 +3,49 @@ module MadBirds
 	module Network
 
 		class ClientInterpreter
-			def initialize(server, socket)
+			def initialize(server, skt)
+				puts 'ClientInterpreter::initialize'
 				@server = server
-				@socket = socket
-				puts 'ClientInterpreter::initialize] Client accepted ' + socket.peeraddr[1]
+				puts 'ClientInterpreter::initialize 2'
+				# @client = skt
+				puts skt.inspect
+				puts 'ClientInterpreter::initialize] Client accepted ' + skt.peeraddr[1].to_s
 			end
 
 			def run
 				puts 'ClientInterpreter::run'
-				while (!@socket.eof?)
+				while (!@client.eof?)
 					puts 'ClientInterpreter::run] Receiving from socket' 
 					stream = @socket.recvfrom(2)
 				end
 				puts 'ClientInterpreter::run] After while'
-				if @socket.eof?
+				if @client.eof?
 					puts 'ClientInterpreter::run] Socket eof!' 
-					@socket.close
+					@client.close
 				end
 				puts 'ClientInterpreter::run] Deleting self'
-				@server.delete(self)
+				@client.delete(self)
 			end
 		end
 
 		class Server < Chingu::BasicGameObject
 			def initialize(options = {})
-				puts 'Server::initialize'
 				@game = options[:game] || $window.current_game_state
 				super(options)
-				@server = TCPServer.new('', 9147)
-				@server.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
-				puts 'Server::initialize'
+
+				Thread.new do
+					server = TCPServer.new('', 9147)
+					server.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
+
+					while !@terminated
+						Thread.new(server.accept) do |client|
+							ClientInterpreter.new(server, client).run
+						end
+					end
+				end
 
 				@clients = []
 				@terminated = false
-				Thread.start do
-					puts 'Server::initialize::Thread::start'
-					while !@terminated do
-						puts 'Server::initialize::Thread::start] Loop'
-						client = @server.accept
-						@clients << Thread.new { ClientInterpreter.new(@server, client).run }
-						puts 'Server::initialize::Thread::start] After accept'
-					end
-				end
 			end
 
 			def delete(client)
