@@ -74,7 +74,7 @@ module MadBirds
 								object.explode unless object.destroying?
 							else
 								object.damage(self, self.damage * (object.body.p.dist(self.body.p)/r)) if object.is_a? MadBirds::Base::LifeObject
-								object.body.apply_impulse((object.body.p-self.body.p)*@weapon.power*3, Geasy::VZERO)
+								object.body.apply_impulse((object.body.p-self.body.p)*@weapon.power*3, Geasy::VZERO) if (!(object.is_a? MadBirds::Base::LifeObject) || (!object.died?))
 							end
 						end
 					end

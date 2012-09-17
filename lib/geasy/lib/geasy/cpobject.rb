@@ -102,12 +102,20 @@ module Geasy
 				super
 			end
 
-			def destroy()
-				super
+			def removeBody
 				self.space().remove_body(self.body)
+			end
+
+			def removeShapes
 				@shapes.each do |shape|
 					self.space.remove_shape(shape)
 				end unless @shapes.nil?
+			end
+
+			def destroy()
+				super
+				self.removeBody
+				self.removeShapes
 				@shapes = nil
 			end
 	end

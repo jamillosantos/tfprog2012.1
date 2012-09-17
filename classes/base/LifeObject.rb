@@ -39,6 +39,7 @@ module MadBirds
 			end
 
 			def die!(how)
+				@died = true
 				if (self.player == how)
 					how.kills -= 1
 					puts 'LifeObject::die!', 'decrease'
@@ -46,6 +47,10 @@ module MadBirds
 					puts 'LifeObject::die!', 'increase'
 					how.kills += 1
 				end
+			end
+
+			def died?
+				@died == true
 			end
 		end
 	end

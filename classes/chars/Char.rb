@@ -28,6 +28,8 @@ module MadBirds
 		attr_accessor :weapons, :body, :shape, :strength, :turned
 		attr_reader :name, :crosshairRadius, :player
 
+		trait :effect
+
 		include Base::LifeObject
 
 		def initialize(options)
@@ -66,7 +68,7 @@ module MadBirds
 						:default=>$imageManager.ids(@setupOptions[:state][:default] || (@setupOptions[:imagePrefix]+'_1').to_sym).image,
 						:blink=>$imageManager.ids(@setupOptions[:state][:blink] || (@setupOptions[:imagePrefix] + '_BLINK').to_sym).image,
 						:injuried=>$imageManager.ids(@setupOptions[:state][:injuried] || (@setupOptions[:imagePrefix] + '_2').to_sym).image,
-						:died=>$imageManager.ids(@setupOptions[:state][:died] || (@setupOptions[:imagePrefix] + '_1').to_sym).image,
+						:died=>$imageManager.ids(@setupOptions[:state][:died] || ('SOUL_' + @setupOptions[:imagePrefix] + '_1').to_sym).image,
 					}
 				end
 				@jumpImpulse = CP::Vec2.new(0, -100*self.strength)
@@ -155,32 +157,35 @@ module MadBirds
 			end
 	
 			def update
-				super
-	
-				# Blink
-				count = (Gosu::milliseconds % 5100)
-				if count < 5000
-					self.image = @images[(self.injuried? ? :injuried : :default)]
+				if self.died? && self.alpha == 0
+					self.destroy
 				else
-					self.image = @images[:blink]
+					super
+		
+					unless self.died?
+						# Blink
+						count = (Gosu::milliseconds % 5100)
+						if count < 5000
+							self.image = @images[(self.injuried? ? :injuried : :default)]
+						else
+							self.image = @images[:blink]
+						end
+					end
+
+					# Velocity deformation
+					self.factor_y = 1 - (self.body.v.y/self.body.v_limit)*0.1
+					self.factor_x = @turned + (self.body.v.y/self.body.v_limit)*0.1*@turned
+		
+					# Sync with Chipmunk
+					self.x = self.body.p.x
+					self.y = self.body.p.y
+		
+					# Crosshair
+					unless @crossHair.nil?
+						@crossHair.x = self.x + (@crosshairRadius*Math.cos(self.weapons.angle))*@turned
+						@crossHair.y = self.y + (@crosshairRadius*Math.sin(self.weapons.angle))
+					end
 				end
-	
-				# Velocity deformation
-				self.factor_y = 1 - (self.body.v.y/self.body.v_limit)*0.1
-				self.factor_x = @turned + (self.body.v.y/self.body.v_limit)*0.1*@turned
-	
-				# Sync with Chipmunk
-				self.x = self.body.p.x
-				self.y = self.body.p.y
-	
-				self.angle = @body.a.degrees
-				# puts self.angle
-	
-				# self.body().t = 1
-	
-				# Crosshair
-				@crossHair.x = self.x + (@crosshairRadius*Math.cos(self.weapons.angle))*@turned
-				@crossHair.y = self.y + (@crosshairRadius*Math.sin(self.weapons.angle))
 			end
 	
 #			def draw
@@ -200,8 +205,20 @@ module MadBirds
 
 			def die!(how)
 				super(how)
-				puts 'Safado morreu!!!!'
-				self.fullHealth
+
+				self.image = @images[:died]
+				self.fade_rate = -1
+				self.body.m = 1
+				@crossHair.destroy
+				@crossHair = nil
+				self.removeShapes
+				self.body.apply_force(CP::Vec2.new(0, -10.5), Geasy::VZERO)
+			end
+
+			def destroy
+				@crossHair.destroy unless @crossHair.nil?
+				@name.destroy
+				super
 			end
 
 			def shoot
