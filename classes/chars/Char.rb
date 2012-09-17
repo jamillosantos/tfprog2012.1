@@ -6,11 +6,27 @@ require 'geasy'
 
 Kernel.r 'base/Object.rb'
 Kernel.r 'base/LifeObject.rb'
+Kernel.r 'base/RelativeObject.rb'
+Kernel.r 'base/Player.rb'
 Kernel.r 'weapon/Weapon.rb'
 
+
 module MadBirds
+	class CharName < Base::RelativeText
+		def initialize(char, options = {})
+			super(options[:name] || '', {
+				:relTo => char,
+				:relX => 0,
+				:relY => -char.crosshairRadius,
+				:color => Gosu::black,
+				:align => :right
+			})
+		end
+	end
+
 	class Char < Base::Object
 		attr_accessor :weapons, :body, :shape, :strength, :turned
+		attr_reader :name, :crosshairRadius, :player
 
 		include Base::LifeObject
 
@@ -18,7 +34,13 @@ module MadBirds
 			@weapons = Base::WeaponManager.new(self)
 			@turned = 1
 
-			super($config['chars/' + options].merge({ :collisionType => :Char }))
+			@player = options[:player]
+			@player.char = self
+
+			super($config['chars/' + options[:class]].merge({ :collisionType => :Char }))
+
+			@name = CharName.create(self)
+			@name.text = @player.name
 		end
 	
 		protected
@@ -59,12 +81,24 @@ module MadBirds
 
 			def _setupCrossHair
 				@crossHair = Chingu::GameObject.create(:image => Gosu::Image.new($window, 'gfx/crosshair.png'), :center_x => 0.5, :center_y => 0.5)
-				@crossHairRadius = @setupOptions[:crosshair][:radius]
+				@crosshairRadius = @setupOptions[:crosshair][:radius]
 			end
 	
 		public
 			def weapons
 				@weapons
+			end
+
+			def player
+				@player
+			end
+
+			def name
+				@name
+			end
+
+			def crosshairRadius
+				@crosshairRadius
 			end
 	
 			def strength
@@ -145,8 +179,8 @@ module MadBirds
 				# self.body().t = 1
 	
 				# Crosshair
-				@crossHair.x = self.x + (@crossHairRadius*Math.cos(self.weapons.angle))*@turned
-				@crossHair.y = self.y + (@crossHairRadius*Math.sin(self.weapons.angle))
+				@crossHair.x = self.x + (@crosshairRadius*Math.cos(self.weapons.angle))*@turned
+				@crossHair.y = self.y + (@crosshairRadius*Math.sin(self.weapons.angle))
 			end
 	
 #			def draw
@@ -172,6 +206,18 @@ module MadBirds
 
 			def shoot
 				@weapons.shoot
+			end
+
+			def startReload
+				@weapons.startReload
+			end
+
+			def checkReload
+				@weapons.checkReload
+			end
+
+			def stopReload
+				@weapons.stopReload
 			end
 	end
 end

@@ -103,7 +103,6 @@ module Geasy
 			end
 
 			def destroy()
-				puts 'CPObject::destroy'
 				super
 				self.space().remove_body(self.body)
 				@shapes.each do |shape|
