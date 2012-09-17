@@ -15,6 +15,8 @@ Kernel.r 'ui/InfoPanel.rb'
 class GameExtended < Game
 	traits :viewport
 
+	attr_reader :players
+
 	def initialize(options = {})
 		super(options)
 
@@ -23,6 +25,8 @@ class GameExtended < Game
 
 		@players = [MadBirds::Base::Player.new({
 			:name => 'Jamillo'
+		}), MadBirds::Base::Player.new({
+			:name => 'Renno'
 		})]
 
 		@parallaxes = []
@@ -43,11 +47,10 @@ class GameExtended < Game
 		tmp << {:image => GFX+File::SEPARATOR+"BLUE_GRASS_BG_3.png", :y=>0, :damping => 1, :center => 0}
 		@parallaxes << tmp
 
-		#@bird2 = MadBirds::Bird.create(:class=>'redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
+		@bird2 = MadBirds::Bird.create(:player=>@players[1], :class=>'redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
 
 		@bird = MadBirds::Bird.create(:player=>@players[0], :class=>'redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
 
-		@bird.health = 10
 		@bird.input = {
 			:space => :shoot,
 			:x => :startJump,
@@ -67,14 +70,13 @@ class GameExtended < Game
 
 		self.input = {
 			:tab => lambda do
-				puts 'Inicializando a outra'
 				$window.push_game_state(MadBirds::UI::Ranking, :finalize=>false, :setup => false)
 			end,
 		}
 
 		# self.space.add_constraint CP::Constraint::PinJoint.new(@bird.body, @bird2.body, CP::Vec2.new(0,0), CP::Vec2.new(0,0))
 
-		@floor = Map.create(:space=>self.space, :config=>'levels/level1');
+		@map = Map.create(:space=>self.space, :config=>'levels/level1');
 
 		# @infoPanel = MadBirds::UI::InfoPanel.create({})
 
@@ -86,12 +88,18 @@ class GameExtended < Game
 	    self.space.add_collision_handler(:Bullet, :Bullet, bulletCollision)
 	end
 
-	def update
-		self.viewport.center_around(@bird)
-		@parallaxes.each do |parallax|
-			parallax.camera_x = self.viewport.x
-			parallax.camera_y = self.viewport.y
+	public
+
+		def players
+			@players
 		end
-		super
-	end
+
+		def update
+			self.viewport.center_around(@bird)
+			@parallaxes.each do |parallax|
+				parallax.camera_x = self.viewport.x
+				parallax.camera_y = self.viewport.y
+			end
+			super
+		end
 end

@@ -15,17 +15,19 @@ module MadBirds
 						$window.pop_game_state()
 					end
 				}
+
+				@game = $window.game_state_manager.current_game_state
 			end
 
 			def update
-				$window.game_state_manager.previous_game_state.update
 				super
+				@game.update
 			end
 
 			def draw
 				$window.draw_quad(0, 0, @backgroundColor, $window.width, 0, @backgroundColor, $window.width, $window.height, @backgroundColor, 0, $window.height, @backgroundColor, @zorder)
 				self.game_objects.draw_relative(0, 0, @zorder+1)
-				$window.game_state_manager.previous_game_state.draw
+				@game.draw
 			end
 		end
 	end

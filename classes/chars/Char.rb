@@ -198,8 +198,8 @@ module MadBirds
 #				}
 #			end
 
-			def die!
-				super
+			def die!(how)
+				super(how)
 				puts 'Safado morreu!!!!'
 				self.fullHealth
 			end

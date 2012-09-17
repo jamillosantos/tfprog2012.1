@@ -66,14 +66,14 @@ module MadBirds
 				unless @destroying
 					point = CP::Vec2.new(self.x, self.y) unless point
 
-					MadBirds::Animation::Explosion.create(:x => point.x, :y => point.y)
+					MadBirds::Animation::Explosion.create(:x => point.x, :y => point.y, :parent=>self.parent)
 					@destroying = true
 					self.parent.game_objects.each do |object|
 						if (object.is_a? MadBirds::Base::Object) && (object.body.p.near?(self.body.p, r))
 							if (object.is_a? Bullet)
 								object.explode unless object.destroying?
 							else
-								object.damage(self.damage * (object.body.p.dist(self.body.p)/r)) if object.is_a? MadBirds::Base::LifeObject
+								object.damage(self, self.damage * (object.body.p.dist(self.body.p)/r)) if object.is_a? MadBirds::Base::LifeObject
 								object.body.apply_impulse((object.body.p-self.body.p)*@weapon.power*3, Geasy::VZERO)
 							end
 						end
@@ -86,6 +86,7 @@ module MadBirds
 		class Missile < Bullet
 			def initialize(options)
 				options[:image] = File.join(GFX, 'bullets', 'missile.png')
+				options[:damage] = 200
 				options[:friction] = 1
 				options[:elasticity] = 0.3
 				options[:shapes] = { :type => :rect, :width => 12, :height => 22 }
@@ -101,7 +102,8 @@ module MadBirds
 					@lastParticle = Gosu::milliseconds
 					MadBirds::Particles::Smoke.create({
 						:x => self.x,
-						:y => self.y
+						:y => self.y,
+						:parent=>self.parent
 					})
 				end
 			end
@@ -252,7 +254,7 @@ module MadBirds
 		class Bazooka < Weapon
 			protected
 			def shootBullet
-				Missile.create(:weapon => self, :angle => @weaponManager.angle)
+				Missile.create(:weapon => self, :angle => @weaponManager.angle, :parent=>self.char.parent)
 			end
 		end
 

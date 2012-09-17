@@ -31,15 +31,21 @@ module MadBirds
 				@health/@life < 0.1
 			end
 
-			def damage(value)
+			def damage(object, value)
 				@health -= value
-				print 'LifeObject::damage: ', '-', value.inspect, ' : ', @health, ' from ', @life
 				if @health < 0
-					self.die! # Pensando que este implemente o Chingu::GameObject
+					self.die!(object.char.player) # Pensando que este implemente o Chingu::GameObject
 				end
 			end
 
-			def die!
+			def die!(how)
+				if (self.player == how)
+					how.kills -= 1
+					puts 'LifeObject::die!', 'decrease'
+				else
+					puts 'LifeObject::die!', 'increase'
+					how.kills += 1
+				end
 			end
 		end
 	end
