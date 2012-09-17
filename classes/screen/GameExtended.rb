@@ -1,19 +1,7 @@
 # -*- coding: utf-8 -*-
 
-require 'geasy'
-require 'chingu'
-require 'chipmunk'
-
-Kernel.r 'screen/Game.rb'
-Kernel.r 'chars/Bird.rb'
-Kernel.r 'collisions/Char.rb'
-Kernel.r 'collisions/Bullet.rb'
-Kernel.r 'maps/Map.rb'
-Kernel.r 'ui/Ranking.rb'
-Kernel.r 'ui/InfoPanel.rb'
-
 class GameExtended < Game
-	traits :viewport
+	traits :viewport, :timer
 
 	attr_reader :players
 
@@ -23,11 +11,21 @@ class GameExtended < Game
 		self.viewport.lag = 0
 		self.viewport.game_area = [0.0, 0.0, 1000.0, 1000.0]
 
-		@players = [MadBirds::Base::Player.new({
+		@rules = {
+			:rebirthDelay => 3000,
+		}.merge(options[:rules] || {})
+
+		@players = [@me = MadBirds::Base::PlayerMe.new({
 			:name => 'Jamillo'
 		}), MadBirds::Base::Player.new({
 			:name => 'Renno'
 		})]
+
+		after (2000) do
+			@players.each do |player|
+				player.createChar
+			end
+		end
 
 		@parallaxes = []
 
@@ -47,26 +45,7 @@ class GameExtended < Game
 		tmp << {:image => GFX+File::SEPARATOR+"BLUE_GRASS_BG_3.png", :y=>0, :damping => 1, :center => 0}
 		@parallaxes << tmp
 
-		@bird2 = MadBirds::Bird.create(:player=>@players[1], :class=>'redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
-
-		@bird = MadBirds::Bird.create(:player=>@players[0], :class=>'redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
-
-		@bird.input = {
-			:space => :shoot,
-			:x => :startJump,
-			:released_x => :jump,
-			:left => :turnLeft,
-			:right => :turnRight,
-			:holding_left => :move,
-			:holding_right => :move,
-			:up => :startChangeAngle,
-			:down => :startChangeAngle,
-			:holding_up => :incAngle,
-			:holding_down => :decAngle,
-			:c => :startReload,
-			:holding_c => :checkReload,
-			:released_c => :stopReload,
-		}
+		# @bird2 = MadBirds::Bird.create(:player=>@players[1], :class=>'redbird')# create(:x=>200, :y=>0, :center_x=>0.5, :center_y=>0.5, :image)
 
 		self.input = {
 			:tab => lambda do
@@ -74,13 +53,8 @@ class GameExtended < Game
 			end,
 		}
 
-		# self.space.add_constraint CP::Constraint::PinJoint.new(@bird.body, @bird2.body, CP::Vec2.new(0,0), CP::Vec2.new(0,0))
+		@map = MadBirds::Maps::Map.create(:space=>self.space, :config=>'levels/level1');
 
-		@map = Map.create(:space=>self.space, :config=>'levels/level1');
-
-		# @infoPanel = MadBirds::UI::InfoPanel.create({})
-
-	    # self.space.add_collision_handler(:Char, :Floor, MadBirds::Collisions::Char.new)
 		bulletCollision = MadBirds::Collisions::Bullet.new
 	    self.space.add_collision_handler(:Bullet, :Floor, bulletCollision)
 	    self.space.add_collision_handler(:Bullet, :Char, bulletCollision)
@@ -90,12 +64,26 @@ class GameExtended < Game
 
 	public
 
+		def rules
+			@rules
+		end
+
 		def players
 			@players
 		end
 
 		def update
-			self.viewport.center_around(@bird)
+			# Center viewport around the @me.char
+			self.viewport.center_around(@me.char) unless @me.char.nil?
+#			self.viewport.x_target = @me.char.x - 320 unless @me.char.nil?
+#			self.viewport.y_target = @me.char.y - 280 unless @me.char.nil?
+
+			# Update the traits for the players
+			@players.each do |player|
+				player.update_trait
+			end
+
+			# Update parallaxes
 			@parallaxes.each do |parallax|
 				parallax.camera_x = self.viewport.x
 				parallax.camera_y = self.viewport.y

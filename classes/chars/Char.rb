@@ -37,7 +37,6 @@ module MadBirds
 			@turned = 1
 
 			@player = options[:player]
-			@player.char = self
 
 			super($config['chars/' + options[:class]].merge({ :collisionType => :Char }))
 
@@ -213,6 +212,8 @@ module MadBirds
 				@crossHair = nil
 				self.removeShapes
 				self.body.apply_force(CP::Vec2.new(0, -10.5), Geasy::VZERO)
+				self.input = {}
+				@player.charDied!
 			end
 
 			def destroy

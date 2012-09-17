@@ -1,8 +1,4 @@
 
-require 'gosu'
-require 'chingu'
-require 'chipmunk'
-
 Kernel.r 'screen/Game.rb'
 Kernel.r 'screen/MainMenu.rb'
 

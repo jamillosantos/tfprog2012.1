@@ -10,7 +10,13 @@ end
 $: << File.dirname(__FILE__) + File::SEPARATOR + 'lib'
 GFX = File.dirname(__FILE__) + File::SEPARATOR + 'gfx'
 
-Kernel.r 'MainWindow'
+require 'gosu'
+require 'chingu'
+require 'geasy'
+
+require File.join(File.dirname(__FILE__), 'lib', 'require_all', 'lib', 'require_all.rb')
+
+require_all 'classes'
 
 $config = Geasy::Config.new
 

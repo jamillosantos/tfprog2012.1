@@ -1,14 +1,8 @@
 
-require 'chingu'
-
-Kernel.r 'screen/GameExtended'
 
 class MainMenuBackground < Chingu::GameObject
 	traits :sprite
-
-
 end
-
 
 class MainMenu < Chingu::GameState
 

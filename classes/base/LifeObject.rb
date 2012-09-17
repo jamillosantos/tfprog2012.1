@@ -1,7 +1,33 @@
 module MadBirds
 	module Base
 		module LifeObject
-			attr_accessor :life, :health
+			attr_accessor :life, :health, :healthImage
+
+			def initializeLifeObject(options)
+				self.life = options[:life] || 100
+				self.health = options[:health] unless options[:health].nil?
+				self.healthImage = options[:healthImage] unless options[:healthImage].nil?
+			end
+
+			def healthImage
+				@healthImage
+			end
+
+			def healthImage=(value)
+				@healthImage
+			end
+
+			def updateHealthImage
+				unless @healthImage.nil?
+					i = ((@health/@life)*100).round
+					@healthImage.each do |k, v|
+						if (k.cover? i)
+							self.image = v
+							break
+						end
+					end
+				end
+			end
 
 			def life
 				@life
@@ -33,8 +59,10 @@ module MadBirds
 
 			def damage(object, value)
 				@health -= value
-				if @health < 0
-					self.die!(object.char.player) # Pensando que este implemente o Chingu::GameObject
+				if @health > 0
+					self.updateHealthImage
+				else
+					self.die!(object.char.player) # Pensando que este implemente o Char
 				end
 			end
 

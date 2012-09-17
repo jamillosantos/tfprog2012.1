@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-require 'geasy'
-require 'chingu'
-
 # Chipmunk steps.
 # @see http://beoran.github.com/chipmunk/#Space
 CP_STEPS = 10
