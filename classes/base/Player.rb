@@ -64,26 +64,6 @@ module MadBirds
 				super
 
 				@char.input = {
-					:i => :shoot,
-					:o => :startJump,
-					:released_o => :jump,
-					:left => :turnLeft,
-					:right => :turnRight,
-					:holding_left => :move,
-					:holding_right => :move,
-					:up => :startChangeAngle,
-					:down => :startChangeAngle,
-					:holding_up => :incAngle,
-					:holding_down => :decAngle
-				}
-			end
-		end
-
-		class Player2 < Player
-			def createChar
-				super
-
-				@char.input = {
 					:s => :shoot,
 					:a => :startJump,
 					:released_a => :jump,
@@ -95,6 +75,26 @@ module MadBirds
 					:v => :startChangeAngle,
 					:holding_f => :incAngle,
 					:holding_v => :decAngle
+				}
+			end
+		end
+
+		class Player2 < Player
+			def createChar
+				super
+
+				@char.input = {
+					:i => :shoot,
+					:o => :startJump,
+					:released_o => :jump,
+					:left => :turnLeft,
+					:right => :turnRight,
+					:holding_left => :move,
+					:holding_right => :move,
+					:up => :startChangeAngle,
+					:down => :startChangeAngle,
+					:holding_up => :incAngle,
+					:holding_down => :decAngle
 				}
 			end
 		end

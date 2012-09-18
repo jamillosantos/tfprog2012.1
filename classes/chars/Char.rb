@@ -154,7 +154,7 @@ module MadBirds
 			def decAngle
 				self.weapons().decAngle
 			end
-	
+
 			def update
 				if self.died? && self.alpha == 0
 					self.destroy

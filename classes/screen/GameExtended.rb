@@ -93,6 +93,11 @@ module MadBirds
 							super
 						end
 					end
+
+					unless @players[0].char.nil?
+						self.viewport.x = @players[0].char.x - w/2
+						self.viewport.y = @players[0].char.y - h/2
+					end
 				end
 		end
 	end
