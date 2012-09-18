@@ -205,17 +205,20 @@ module MadBirds
 #			end
 
 			def die!(how)
-				super(how)
-
-				self.image = @images[:died]
-				self.fade_rate = -1
-				self.body.m = 1
-				@crossHair.destroy unless @crossHair.nil?
-				@crossHair = nil
-				self.removeShapes
-				self.body.apply_force(CP::Vec2.new(0, -10.5), Geasy::VZERO)
-				self.input = {}
-				@player.charDied!
+				unless self.died?
+					super(how)
+					@died = true
+	
+					self.image = @images[:died]
+					self.fade_rate = -1
+					self.body.m = 1
+					@crossHair.destroy unless @crossHair.nil?
+					@crossHair = nil
+					self.removeShapes
+					self.body.apply_force(CP::Vec2.new(0, -10.5), Geasy::VZERO)
+					self.input = {}
+					@player.charDied!
+				end
 			end
 
 			def destroy

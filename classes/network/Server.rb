@@ -4,11 +4,8 @@ module MadBirds
 
 		class ClientInterpreter
 			def initialize(server, skt)
-				puts 'ClientInterpreter::initialize'
 				@server = server
-				puts 'ClientInterpreter::initialize 2'
-				# @client = skt
-				puts skt.inspect
+				@client = skt
 				puts 'ClientInterpreter::initialize] Client accepted ' + skt.peeraddr[1].to_s
 			end
 
@@ -16,7 +13,7 @@ module MadBirds
 				puts 'ClientInterpreter::run'
 				while (!@client.eof?)
 					puts 'ClientInterpreter::run] Receiving from socket' 
-					stream = @socket.recvfrom(2)
+					stream = @client.recvfrom(2)
 				end
 				puts 'ClientInterpreter::run] After while'
 				if @client.eof?

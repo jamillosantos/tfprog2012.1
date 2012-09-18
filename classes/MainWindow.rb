@@ -3,7 +3,7 @@
 class MainWindow < Chingu::Window
 
 	def initialize
-		super(640, 480)
+		super(800, 480)
 		self.caption = 'Mad Birds'
 
 		push_game_state(MadBirds::GameStates::Loading)
